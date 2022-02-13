@@ -1,0 +1,532 @@
+
+
+<UI>
+
+
+    <Frame name="SamsUiTopBar" mixin="SamsUiTopBarMixin" parent="UIParent" frameStrata="LOW" frameLevel="3" enableMouse="true" movable="true">
+        <Size y="50"/>
+        <Anchors>
+            <Anchor point="TOPLEFT" x="0" y="0"/>
+            <Anchor point="TOPRIGHT" x="0" y="0"/>
+        </Anchors>
+
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture atlas="ClassHall_InfoBoxMission-BackgroundTile" horizTile="true">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="0" y="-8"/>
+                        <Anchor point="BOTTOMRIGHT" x="0" y="8"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="DIALOG">
+                <Texture parentKey="borderTexture" atlas="_BattleSlotTitle-Mid" horizTile="true" setAllPoints="true"/>
+            </Layer>
+
+            <Layer>
+                <FontString parentKey="mainMenuLabel" inherits="GameFontNormal" text="Menu">
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" x="-80" y="0"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+
+
+<!-- AlliedRace-UnlockingFrame-ZoomIn -->
+        <Frames>
+            <Button parentKey="openMainMenuButton">
+                <Size x="28" y="28"/>
+                <Anchors>
+                    <Anchor point="RIGHT" x="-8" y="0"/>
+                </Anchors>
+                <NormalTexture atlas="auctionhouse-ui-dropdown-arrow-up"/>
+                <PushedTexture atlas="auctionhouse-ui-dropdown-arrow-down"/>
+                <HighlightTexture atlas="chatframe-button-highlightalert"/>
+            </Button>
+
+            <Frame parentKey="mainMenu" hidden="true">
+                <Anchors>
+                    <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" x="-10" y="-45"/>
+                </Anchors>
+            </Frame>
+
+            <Button parentKey="openMinimapButtonsButton">
+                <Size x="28" y="28"/>
+                <Anchors>
+                    <Anchor point="RIGHT" x="-110" y="0"/>
+                </Anchors>
+                <NormalTexture atlas="auctionhouse-ui-dropdown-arrow-up"/>
+                <PushedTexture atlas="auctionhouse-ui-dropdown-arrow-down"/>
+                <HighlightTexture atlas="chatframe-button-highlightalert"/>
+            </Button>
+
+            <Frame parentKey="minimapButtonsContainer" frameStrata="LOW" frameLevel="2" alpha="0" hidden="true">
+                <Animations>
+                    <AnimationGroup parentKey="anim" setToFinalAlpha="true">
+                        <Alpha parentKey="fadeIn" duration="0.33" fromAlpha="0" toAlpha="1" smoothing="OUT"/>
+                        <Translation parentKey="translate" duration="0.33" offsetX="0" offsetY="-40" smoothing="OUT"/>
+                    </AnimationGroup>
+                </Animations>
+                <Size y="50"/>
+                <Anchors>
+                    <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" x="-150" y="-9"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture parentKey="background" atlas="transmog-set-iconrow-background" setAllPoints="true" alpha="1.0"/>
+                    </Layer>
+                </Layers>
+            </Frame>
+
+        </Frames>
+
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+        </Scripts>
+
+    </Frame>
+
+
+
+
+
+    <Frame name="SamsUiPlayerBar" mixin="SamsUiPlayerBarMixin" frameStrata="LOW" frameLevel="4">
+
+        <Size x="200" y="40"/>
+
+        <Anchors>
+            <Anchor point="TOPRIGHT" relativeTo="SamsUiTopBar" relativePoint="BOTTOM" x="-45" y="4"/>
+        </Anchors>
+
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="background" setAllPoints="true" atlas="ClassHall_StoneFrame-BackgroundTile" alpha="0.8"/>
+            </Layer>
+            <Layer level="BORDER">
+                <Texture atlas="_BattleSlotFrame-Divider" horizTile="true">
+                    <Size y="8"/>
+                    <Anchors>
+                        <Anchor point="LEFT" x="0" y="0"/>
+                        <Anchor point="RIGHT" x="0" y="0"/>
+                    </Anchors>
+                </Texture>
+                <Texture atlas="_BattleSlotFrame-Divider" horizTile="true">
+                    <Size y="8"/>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="0" y="-6"/>
+                        <Anchor point="BOTTOMRIGHT" x="0" y="-6"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture parentKey="portrait">
+                    <Size x="58" y="58"/>
+                    <Anchors>
+                        <Anchor point="RIGHT" relativePoint="LEFT" x="5" y="-2"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <Texture parentKey="portraitRing" atlas="auctionhouse-itemicon-border-white">
+                    <Size x="80" y="80"/>
+                    <Anchors>
+                        <Anchor point="RIGHT" relativePoint="LEFT" x="16" y="-3"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+
+        <Frames>
+            <StatusBar parentKey="healthBar" useParentLevel="true" minValue="0" maxValue="100" defaultValue="50" orientation="HORIZONTAL">
+                <Size y="17"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT"  x="0" y="0"/> <!-- set this to -25 and remove the toright x value if using a full fill texture -->
+                    <Anchor point="TOPRIGHT" x="0" y="0"/>
+                </Anchors>
+                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <!-- <BarTexture atlas="_BattleSlotTitle-BG"/>> -->
+                <!-- <BarTexture atlas="Artifacts-Warlock-Header"/> -->
+                <BarColor r="0.0" g="1.0" b="0.0" a="0.9"/>
+
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString parentKey="text" inherits="GameFontNormal">
+                            <Color r="1" g="1" b="1"/>
+                            <Size x="180" y="17"/>
+                            <Anchors>
+                                <Anchor point="CENTER" x="0" y="0"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+
+            </StatusBar>
+
+            <StatusBar parentKey="powerBar" useParentLevel="true" minValue="0" maxValue="100" defaultValue="50" orientation="HORIZONTAL">
+                <Size y="17"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT"  x="0" y="1"/> <!-- set this to -25 and remove the toright x value if using a full fill texture -->
+                    <Anchor point="BOTTOMRIGHT" x="0" y="1"/>
+                </Anchors>
+                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <!-- <BarTexture atlas="_BattleSlotTitle-BG"/>> -->
+                <!-- <BarTexture atlas="Artifacts-Warlock-Header"/> -->
+                <BarColor r="0.0" g="0.0" b="1.0" a="0.9"/>
+
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString parentKey="text" inherits="GameFontNormal">
+                            <Color r="1" g="1" b="1"/>
+                            <Size x="180" y="17"/>
+                            <Anchors>
+                                <Anchor point="CENTER" x="0" y="0"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+
+            </StatusBar>
+        </Frames>
+
+
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+            <OnEvent method="OnEvent"/>
+            <OnUpdate method="OnUpdate"/>
+        </Scripts>
+
+    </Frame>
+
+
+
+
+
+
+<!-- Start-VersusSplash -->
+
+    <Frame name="SamsUiTargetBar" mixin="SamsUiTargetBarMixin" frameStrata="LOW" frameLevel="4">
+
+        <Size x="200" y="40"/>
+
+        <Anchors>
+            <Anchor point="TOPLEFT" relativeTo="SamsUiTopBar" relativePoint="BOTTOM" x="45" y="4"/>
+        </Anchors>
+
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="background" setAllPoints="true" atlas="ClassHall_StoneFrame-BackgroundTile" alpha="0.8"/>
+                <Texture parentKey="nameBackground" setAllPoints="true" atlas="auctionhouse-nav-button">
+                    <TexCoords left="0.0" right="1.0" top="1.0" bottom="0.0"/>
+                    <Size x="246" y="40"/>
+                    <Anchors>
+                        <Anchor point="TOP" relativePoint="BOTTOM" x="-26" y="15"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="BORDER">
+                <Texture atlas="_BattleSlotFrame-Divider" horizTile="true">
+                    <Size y="8"/>
+                    <Anchors>
+                        <Anchor point="LEFT" x="0" y="0"/>
+                        <Anchor point="RIGHT" x="0" y="0"/>
+                    </Anchors>
+                </Texture>
+                <Texture atlas="_BattleSlotFrame-Divider" horizTile="true">
+                    <Size y="8"/>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="0" y="-6"/>
+                        <Anchor point="BOTTOMRIGHT" x="0" y="-6"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture parentKey="portrait">
+                    <Size x="58" y="58"/>
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" x="-5" y="-2"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <Texture parentKey="portraitRing" atlas="auctionhouse-itemicon-border-white">
+                    <Size x="80" y="80"/>
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" x="-16" y="-3"/>
+                    </Anchors>
+                </Texture>
+                <FontString parentKey="name" inherits="GameFontNormal">
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="BOTTOM" relativeKey="$parent.nameBackground" relativePoint="BOTTOM" x="10" y="6"/>
+                    </Anchors>
+                </FontString>
+
+                <Texture parentKey="factionIcon">
+                    <Size x="44" y="44"/>
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" relativeKey="$parent.nameBackground" x="14" y="-12"/>
+                    </Anchors>
+                </Texture>
+                <FontString parentKey="level" inherits="GameFontNormal" text="?">
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="CENTER" relativeKey="$parent.factionIcon" relativePoint="CENTER" x="0" y="0"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+
+        <Frames>
+            <StatusBar parentKey="healthBar" useParentLevel="true" reverseFill="true" minValue="0" maxValue="100" defaultValue="50" orientation="HORIZONTAL">
+                <Size y="17"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT"  x="0" y="0"/> <!-- set this to -25 and remove the toright x value if using a full fill texture -->
+                    <Anchor point="TOPRIGHT" x="0" y="0"/>
+                </Anchors>
+                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <!-- <BarTexture atlas="_BattleSlotTitle-BG"/>> -->
+                <!-- <BarTexture atlas="Artifacts-Warlock-Header"/> -->
+                <BarColor r="0.0" g="1.0" b="0.0" a="0.9"/>
+
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString parentKey="text" inherits="GameFontNormal">
+                            <Color r="1" g="1" b="1"/>
+                            <Size x="180" y="17"/>
+                            <Anchors>
+                                <Anchor point="CENTER" x="0" y="0"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+
+            </StatusBar>
+
+            <StatusBar parentKey="powerBar" useParentLevel="true" reverseFill="true" minValue="0" maxValue="100" defaultValue="50" orientation="HORIZONTAL">
+                <Size y="17"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT"  x="0" y="1"/> <!-- set this to -25 and remove the toright x value if using a full fill texture -->
+                    <Anchor point="BOTTOMRIGHT" x="0" y="1"/>
+                </Anchors>
+                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <!-- <BarTexture atlas="_BattleSlotTitle-BG"/>> -->
+                <!-- <BarTexture atlas="Artifacts-Warlock-Header"/> -->
+                <BarColor r="0.0" g="0.0" b="1.0" a="0.9"/>
+
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString parentKey="text" inherits="GameFontNormal">
+                            <Color r="1" g="1" b="1"/>
+                            <Size x="180" y="17"/>
+                            <Anchors>
+                                <Anchor point="CENTER" x="0" y="0"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+
+            </StatusBar>
+        </Frames>
+
+
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+            <OnEvent method="OnEvent"/>
+            <OnUpdate method="OnUpdate"/>
+        </Scripts>
+
+    </Frame>
+
+
+
+
+
+
+    <Frame name="SamsUiConfigPanel" mixin="SamsUiConfigPanelMixin" parent="UIParent" inherits="PortraitFrameTemplate" frameStrata="HIGH" enableMouse="true" movable="true" hidden="true">
+        <Size x="500" y="400"/>
+        <Anchors>
+            <Anchor point="CENTER" x="0" y="0"/>
+        </Anchors>
+
+
+        <Frames>
+
+            <!-- player health config -->
+            <CheckButton parentKey="playerHealthTextCheckButton" inherits="ChatConfigCheckButtonTemplate">
+                <Size x="24" y="24"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="16" y="-80"/>
+                </Anchors>
+                <Layers>
+                    <Layer>
+                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Show player health values">
+                            <Color r="1" g="1" b="1" a="1"/>
+                            <!-- <FontHeight val="12"/> -->
+                            <Anchors>
+                                <Anchor point="LEFT">
+                                    <offset x="24" y="0"/>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>  
+            </CheckButton>
+
+            <EditBox parentKey="playerHealthTextFormatEditBox" inherits="InputBoxTemplate" autoFocus="false">
+                <Size x="200" y="20"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.playerHealthTextCheckButton" relativePoint="BOTTOMLEFT" x="7" y="-16"/>
+                </Anchors>
+                <Layers>
+                    <Layer>
+                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Text format">
+                            <Color r="1" g="1" b="1" a="1"/>
+                            <!-- <FontHeight val="12"/> -->
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="0" y="2"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>                 
+            </EditBox>
+
+
+            <!-- player power config -->
+            <CheckButton parentKey="playerPowerTextCheckButton" inherits="ChatConfigCheckButtonTemplate">
+                <Size x="24" y="24"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.playerHealthTextCheckButton" relativePoint="BOTTOMLEFT" x="0" y="-50"/>
+                </Anchors>
+                <Layers>
+                    <Layer>
+                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Show player power values">
+                            <Color r="1" g="1" b="1" a="1"/>
+                            <!-- <FontHeight val="12"/> -->
+                            <Anchors>
+                                <Anchor point="LEFT">
+                                    <offset x="24" y="0"/>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>  
+            </CheckButton>
+
+            <EditBox parentKey="playerPowerTextFormatEditBox" inherits="InputBoxTemplate" autoFocus="false">
+                <Size x="200" y="20"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.playerPowerTextCheckButton" relativePoint="BOTTOMLEFT" x="7" y="-16"/>
+                </Anchors>
+                <Layers>
+                    <Layer>
+                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Text format">
+                            <Color r="1" g="1" b="1" a="1"/>
+                            <!-- <FontHeight val="12"/> -->
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="0" y="2"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>                 
+            </EditBox>
+
+
+
+            <!-- target health config -->
+            <CheckButton parentKey="targetHealthTextCheckButton" inherits="ChatConfigCheckButtonTemplate">
+                <Size x="24" y="24"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.playerPowerTextCheckButton" relativePoint="BOTTOMLEFT" x="0" y="-70"/>
+                </Anchors>
+                <Layers>
+                    <Layer>
+                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Show target health values">
+                            <Color r="1" g="1" b="1" a="1"/>
+                            <!-- <FontHeight val="12"/> -->
+                            <Anchors>
+                                <Anchor point="LEFT">
+                                    <offset x="24" y="0"/>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>  
+            </CheckButton>
+
+            <EditBox parentKey="targetHealthTextFormatEditBox" inherits="InputBoxTemplate" autoFocus="false">
+                <Size x="200" y="20"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.targetHealthTextCheckButton" relativePoint="BOTTOMLEFT" x="7" y="-16"/>
+                </Anchors>
+                <Layers>
+                    <Layer>
+                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Text format">
+                            <Color r="1" g="1" b="1" a="1"/>
+                            <!-- <FontHeight val="12"/> -->
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="0" y="2"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>                 
+            </EditBox>
+
+
+            <!-- target power config -->
+            <CheckButton parentKey="targetPowerTextCheckButton" inherits="ChatConfigCheckButtonTemplate">
+                <Size x="24" y="24"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.targetHealthTextCheckButton" relativePoint="BOTTOMLEFT" x="0" y="-50"/>
+                </Anchors>
+                <Layers>
+                    <Layer>
+                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Show target power values">
+                            <Color r="1" g="1" b="1" a="1"/>
+                            <!-- <FontHeight val="12"/> -->
+                            <Anchors>
+                                <Anchor point="LEFT">
+                                    <offset x="24" y="0"/>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>  
+            </CheckButton>
+
+            <EditBox parentKey="targetPowerTextFormatEditBox" inherits="InputBoxTemplate" autoFocus="false">
+                <Size x="200" y="20"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.targetPowerTextCheckButton" relativePoint="BOTTOMLEFT" x="7" y="-16"/>
+                </Anchors>
+                <Layers>
+                    <Layer>
+                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Text format">
+                            <Color r="1" g="1" b="1" a="1"/>
+                            <!-- <FontHeight val="12"/> -->
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="0" y="2"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>                 
+            </EditBox>
+
+
+        </Frames>
+
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+            <OnEvent method="OnEvent"/>
+            <OnDragStart>
+                self:StartMoving()
+            </OnDragStart>
+            <OnDragStop>
+                self:StopMovingOrSizing()
+            </OnDragStop>
+        </Scripts>
+    </Frame>
+
+
+</UI>

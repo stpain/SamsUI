@@ -1,0 +1,11 @@
+## Title: Sams UI mod
+## Version: 0.1
+## Interface: 205020
+## Notes: Sams ui mod addon
+## SavedVariables: SamsUiConfig, SamsUiCharacters
+
+Templates.lua
+Templates.xml
+
+SamsUI.lua
+SamsUI.xml

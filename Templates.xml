@@ -1,0 +1,42 @@
+
+
+<UI>
+
+    <Button name="SamsUiTopBarMainMenuButton" mixin="SamsUiTopBarMainMenuButtonMixin" virtual="true">
+        <NormalTexture atlas="garrlanding-mission-inprogress"/>
+        <PushedTexture atlas="garrlanding-mission-inprogress"/>
+        <HighlightTexture atlas="PetList-ButtonHighlight"/>
+
+        <Animations>
+            <AnimationGroup parentKey="anim" setToFinalAlpha="true">
+                <Alpha parentKey="fadeIn" duration="0.33" fromAlpha="0" toAlpha="1" smoothing="OUT"/>
+                <!-- <Translation parentKey="translate" duration="1" offsetX="0" offsetY="-28" smoothing="OUT"/> -->
+            </AnimationGroup>
+        </Animations>
+
+        <Layers>
+            <Layer level="OVERLAY">
+                <FontString parentKey="text" inherits="GameFontNormal">
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="CENTER" x="0" y="0"/>
+                    </Anchors>
+                </FontString>
+
+                <Texture parentKey="icon">
+                    <Size x="28" y="28"/>
+                    <Anchors>
+                        <Anchor point="LEFT" x="0" y="0"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+            <OnClick method="OnClick"/>
+            <OnShow method="OnShow"/>
+            <OnHide method="OnHide"/>
+        </Scripts>
+    </Button>
+</UI>
