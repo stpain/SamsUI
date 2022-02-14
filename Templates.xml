@@ -18,12 +18,45 @@
     </Frame>
 
 
+    <Button name="SamsUiTopBarDropdownMenuButton" mixin="SamsUiTopBarDropdownMenuButtonMixin" virtual="true">
+        <Attributes>
+            <Attribute name="type1" value="macro"/>
+        </Attributes>
+        <NormalTexture atlas="auctionhouse-ui-dropdown-arrow-up"/>
+        <PushedTexture atlas="auctionhouse-ui-dropdown-arrow-down"/>
+        <HighlightTexture atlas="chatframe-button-highlightalert"/>
+    </Button>
 
-    <Button name="SamsUiTopBarMainMenuButton" mixin="SamsUiTopBarMainMenuButtonMixin" virtual="true">
-        <!-- <NormalTexture atlas="garrlanding-mission-inprogress"/>
-        <PushedTexture atlas="garrlanding-mission-inprogress"/> -->
+
+    <Button name="SamsUiTopBarInsetButton" mixin="SamsUiTopBarInsetButtonMixin" virtual="true">
+
         <NormalTexture atlas="questitemborder"/>
         <PushedTexture atlas="questitemborder"/>
+        <HighlightTexture atlas="questitemborder"/>
+
+        <Layers>
+            <Layer level="OVERLAY">
+                <FontString parentKey="text" inherits="GameFontNormalSmall">
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="CENTER" x="0" y="0"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+            <OnShow method="OnShow"/>
+        </Scripts>
+    </Button>
+
+
+    <Button name="SamsUiTopBarMainMenuButton" mixin="SamsUiTopBarMainMenuButtonMixin" inherits="InsecureActionButtonTemplate" registerForClicks="LeftButtonUp,RightButtonUp" virtual="true">
+        <!-- <NormalTexture atlas="garrlanding-mission-inprogress"/>
+        <PushedTexture atlas="garrlanding-mission-inprogress"/> -->
+        <NormalTexture atlas="GarrMission_FollowerListButton"/>
+        <PushedTexture atlas="GarrMission_FollowerListButton"/>
         <HighlightTexture atlas="PetList-ButtonHighlight"/>
         <Animations>
             <AnimationGroup parentKey="anim" setToFinalAlpha="true">
@@ -52,7 +85,8 @@
 
         <Scripts>
             <OnLoad method="OnLoad"/>
-            <OnClick method="OnClick"/>
+            <!-- <OnClick method="OnClick"/> -->
+            <OnMouseDown method="OnMouseDown"/>
             <OnShow method="OnShow"/>
             <OnHide method="OnHide"/>
         </Scripts>

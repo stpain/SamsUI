@@ -26,13 +26,51 @@ function SamsUiTopBarMainMenuButtonMixin:OnHide()
     self:SetAlpha(0)
 end
 
-function SamsUiTopBarMainMenuButtonMixin:OnClick()
+function SamsUiTopBarMainMenuButtonMixin:OnMouseDown()
     if self.func then
         self.func()
     end
 end
 
+function SamsUiTopBarMainMenuButtonMixin:OnClick()
 
+end
+
+
+
+
+
+SamsUiTopBarDropdownMenuButtonMixin = {}
+
+function SamsUiTopBarDropdownMenuButtonMixin:OnLoad()
+
+end
+
+function SamsUiTopBarDropdownMenuButtonMixin:OnShow()
+
+end
+
+function SamsUiTopBarDropdownMenuButtonMixin:SetText(text)
+    self.text:SetText(text)
+end
+
+
+
+
+
+SamsUiTopBarInsetButtonMixin = {}
+
+function SamsUiTopBarInsetButtonMixin:OnLoad()
+
+end
+
+function SamsUiTopBarInsetButtonMixin:OnShow()
+
+end
+
+function SamsUiTopBarInsetButtonMixin:SetText(text)
+    self.text:SetText(text)
+end
 
 
 

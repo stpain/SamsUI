@@ -243,7 +243,8 @@ function SamsUiConfigPanelMixin:OnLoad()
     UIWidgetTopCenterContainerFrame:SetPoint("TOP", MinimapCluster, "BOTTOM", 9, -10)
 
     DurabilityFrame:ClearAllPoints()
-    DurabilityFrame:SetPoint("RIGHT", UIWidgetTopCenterContainerFrame, "LEFT", -10, 0)
+    DurabilityFrame:SetPoint("RIGHT", SamsUiPlayerBar.portrait, "LEFT", -10, 0)
+    DurabilityFrame:Show()
 
     MirrorTimer1:ClearAllPoints()
     MirrorTimer1:SetPoint("TOP", MinimapCluster, "BOTTOM", 9, -5)
@@ -291,6 +292,10 @@ function SamsUiConfigPanelMixin:LoadMinimapPanel()
 
     _G[panel.numberIconsPerRow:GetName().."Low"]:SetText("1")
     _G[panel.numberIconsPerRow:GetName().."High"]:SetText("10")
+
+    _G[panel.numberIconsPerRow:GetName().."Text"]:SetText(Database:GetConfigValue("numberMinimapIconsPerRow") or 6)
+    panel.numberIconsPerRow:SetValue(Database:GetConfigValue("numberMinimapIconsPerRow") or 6)
+
 
     panel.numberIconsPerRow:SetScript("OnValueChanged", function()
         _G[panel.numberIconsPerRow:GetName().."Text"]:SetText(string.format("%.0f", panel.numberIconsPerRow:GetValue()))
@@ -440,7 +445,9 @@ function SamsUiTopBarMixin:OnLoad()
     self.mainMenu.keys = {
         "Options",
         "Reload UI",
-        "Character",
+        --"Character",
+        "Log out",
+        "Exit",
     }
 
     self.mainMenu.menu = {
@@ -461,6 +468,14 @@ function SamsUiTopBarMixin:OnLoad()
             func = function()
                 CharacterFrame:Show()
             end,
+        },
+        ["Log out"] = {
+            atlas = "mageportalalliance",
+            macro = "/logout",
+        },
+        ["Exit"] = {
+            atlas = "poi-door-left",
+            macro = "/quit",
         },
     }
 
@@ -492,11 +507,11 @@ function SamsUiTopBarMixin:OnLoad()
 
     self.minimapButtonsContainer:SetScript("OnHide", function()
         self.minimapButtonsContainer:SetAlpha(0)
-        self.minimapButtonsContainer:SetPoint("TOPRIGHT", self.openMinimapButtonsButton, "TOPRIGHT", -50, -9)
+        self.minimapButtonsContainer:SetPoint("TOPRIGHT", self.openMinimapButtonsButton, "TOPRIGHT", 5, -9)
     end)
 
     self.minimapButtonsContainer.anim.translate:SetScript("OnFinished", function()
-        self.minimapButtonsContainer:SetPoint("TOPRIGHT", self.openMinimapButtonsButton, "TOPRIGHT", -50, -54)
+        self.minimapButtonsContainer:SetPoint("TOPRIGHT", self.openMinimapButtonsButton, "TOPRIGHT", 5, -54)
     end)
 
 
@@ -504,6 +519,15 @@ function SamsUiTopBarMixin:OnLoad()
     self.openCurrencyButton:SetScript("OnEnter", function()        
         GameTooltip:SetOwner(self.openCurrencyButton, 'ANCHOR_BOTTOM')
         GameTooltip:AddLine("Gold")
+        local profit = GetMoney() - (Database:GetCharacterInfo(self.nameRealm, "initialLoginGold") or 0)
+        if profit > 0 then
+            GameTooltip:AddLine(string.format("|cff00cc00Profit|r %s", GetCoinTextureString(profit), 1,1,1))
+        elseif profit == 0 then
+            GameTooltip:AddLine(string.format("|cffB6CAB8Profit|r %s", GetCoinTextureString(profit), 1,1,1))
+        else
+            GameTooltip:AddLine(string.format("|cffcc0000Deficit|r %s", GetCoinTextureString(profit*-1), 1,1,1))
+        end
+        GameTooltip:AddLine(" ")
         local totalGold = 0;
 
         for name, character in Database:GetCharacters() do
@@ -525,6 +549,7 @@ function SamsUiTopBarMixin:OnLoad()
     self:RegisterEvent("ADDON_LOADED")
     self:RegisterEvent("PLAYER_MONEY")
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
+    self:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
 
 
 end
@@ -546,11 +571,22 @@ function SamsUiTopBarMixin:OnEvent(event, ...)
         self.nameRealm = string.format("%s-%s", name, realm)
 
         Database:Init()
+
+        local initialLogin, reload = ...
+        if initialLogin == true then
+            Database:InsertOrUpdateCharacterInfo( self.nameRealm, "initialLoginGold", GetMoney())
+
+        end
     end
 
     if event == "PLAYER_MONEY" then
         self:UpdateCurrency()
     end
+
+    if event == "UPDATE_INVENTORY_DURABILITY" then
+        self:UpdateDurability()
+    end
+
 end
 
 
@@ -562,6 +598,24 @@ function SamsUiTopBarMixin:OnDatabaseInitialised()
     local _, class = UnitClass("player")
     Database:InsertOrUpdateCharacterInfo(self.nameRealm, "class", class)
 
+    self:UpdateDurability()
+
+end
+
+
+function SamsUiTopBarMixin:UpdateDurability()
+
+    local currentDurability, maximumDurability = 0, 0;
+    for i = 1, 19 do
+        local current, maximum = GetInventoryItemDurability(i)
+        currentDurability = currentDurability + (current or 0);
+        maximumDurability = maximumDurability + (maximum or 0);
+    end
+
+    local durability = tonumber(string.format("%.1f", (currentDurability / maximumDurability) * 100));
+
+    self.openDurabilityButton:SetText(string.format("%s %%", durability))
+
 end
 
 
@@ -572,7 +626,7 @@ function SamsUiTopBarMixin:UpdateCurrency()
     end
 
     local gold = GetMoney();
-    self.openCurrencyButton.text:SetText(GetCoinTextureString(gold))
+    self.openCurrencyButton:SetText(GetCoinTextureString(gold))
 
     Database:InsertOrUpdateCharacterInfo(self.nameRealm, "gold", gold)
 
@@ -716,9 +770,17 @@ function SamsUiTopBarMixin:OpenMainMenu()
             button:SetPoint("TOP", 0, (k-1)*-31)
             button:SetSize(200, 30)
             button:SetText(item)
-            button:SetIconAtlas(self.mainMenu.menu[item].atlas)
 
-            button.func = self.mainMenu.menu[item].func;
+            if self.mainMenu.menu[item].macro then
+                button:SetAttribute("type1", "macro")
+                button:SetAttribute("macrotext1", string.format([[%s]], self.mainMenu.menu[item].macro))
+                button.func = nil;
+            else
+                button.func = self.mainMenu.menu[item].func;
+
+            end
+
+            button:SetIconAtlas(self.mainMenu.menu[item].atlas)
             
             button.anim.fadeIn:SetStartDelay(k/25)
 

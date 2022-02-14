@@ -30,20 +30,23 @@
                         <Anchor point="LEFT" relativePoint="RIGHT" x="-80" y="0"/>
                     </Anchors>
                 </FontString>
+                <FontString parentKey="minimapIconsMenuLabel" inherits="GameFontNormal" text="Minimap Icons">
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" x="-240" y="0"/>
+                    </Anchors>
+                </FontString>
             </Layer>
         </Layers>
 
 
 <!-- AlliedRace-UnlockingFrame-ZoomIn -->
         <Frames>
-            <Button parentKey="openMainMenuButton">
+            <Button parentKey="openMainMenuButton" inherits="SamsUiTopBarDropdownMenuButton">
                 <Size x="28" y="28"/>
                 <Anchors>
                     <Anchor point="RIGHT" x="-8" y="0"/>
                 </Anchors>
-                <NormalTexture atlas="auctionhouse-ui-dropdown-arrow-up"/>
-                <PushedTexture atlas="auctionhouse-ui-dropdown-arrow-down"/>
-                <HighlightTexture atlas="chatframe-button-highlightalert"/>
             </Button>
 
             <Frame parentKey="mainMenu" hidden="true">
@@ -57,14 +60,11 @@
                 </Layers>
             </Frame>
 
-            <Button parentKey="openMinimapButtonsButton">
+            <Button parentKey="openMinimapButtonsButton" inherits="SamsUiTopBarDropdownMenuButton">
                 <Size x="28" y="28"/>
                 <Anchors>
                     <Anchor point="RIGHT" x="-110" y="0"/>
                 </Anchors>
-                <NormalTexture atlas="auctionhouse-ui-dropdown-arrow-up"/>
-                <PushedTexture atlas="auctionhouse-ui-dropdown-arrow-down"/>
-                <HighlightTexture atlas="chatframe-button-highlightalert"/>
             </Button>
 
             <Frame parentKey="minimapButtonsContainer" frameStrata="LOW" frameLevel="2" alpha="0" hidden="true">
@@ -76,7 +76,7 @@
                 </Animations>
                 <Size x="0" y="0"/>
                 <Anchors>
-                    <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeKey="$parent.openMinimapButtonsButton" x="-50" y="-9"/>
+                    <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeKey="$parent.openMinimapButtonsButton" x="5" y="-9"/>
                 </Anchors>
                 <Layers>
                     <Layer level="BACKGROUND">
@@ -88,28 +88,25 @@
 
 
 
-            <Button parentKey="openCurrencyButton">
+            <Button parentKey="openCurrencyButton" inherits="SamsUiTopBarInsetButton">
                 <Size x="140" y="24"/>
                 <Anchors>
                     <Anchor point="LEFT" x="10" y="0"/>
                 </Anchors>
-
-                <NormalTexture atlas="questitemborder"/>
-                <PushedTexture atlas="questitemborder"/>
-                <HighlightTexture atlas="questitemborder"/>
-
-                <Layers>
-                    <Layer level="OVERLAY">
-                        <FontString parentKey="text" inherits="GameFontNormalSmall">
-                            <Color r="1" g="1" b="1"/>
-                            <Size x="130" y="22"/>
-                            <Anchors>
-                                <Anchor point="CENTER" x="0" y="0"/>
-                            </Anchors>
-                        </FontString>
-                    </Layer>
-                </Layers>
             </Button>
+
+
+            <Button parentKey="openDurabilityButton" inherits="SamsUiTopBarInsetButton">
+                <Size x="90" y="24"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.openCurrencyButton" relativePoint="RIGHT" x="10" y="0"/>
+                </Anchors>
+            </Button>
+
+
+            <Frame parentKey="durabilityFrame" >
+
+            </Frame>
 
         </Frames>
 
