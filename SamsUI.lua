@@ -31,9 +31,12 @@ function Database:Init()
         SamsUiCharacters = {};
     end
 
-    self:RegisterCallback("OnInitialised", SamsUiConfigPanel.LoadConfigVariables, SamsUiConfigPanel)
+    --self:AddNewConfigOption("numberMinimapIconsPerRow", 6)
+
+    self:RegisterCallback("OnInitialised", SamsUiConfigPanel.OnDatabaseInitialised, SamsUiConfigPanel)
     self:RegisterCallback("OnInitialised", SamsUiPlayerBar.LoadConfigVariables, SamsUiPlayerBar)
     self:RegisterCallback("OnInitialised", SamsUiTargetBar.LoadConfigVariables, SamsUiTargetBar)
+    self:RegisterCallback("OnInitialised", SamsUiTopBar.OnDatabaseInitialised, SamsUiTopBar)
 
     self:RegisterCallback("OnConfigChanged", SamsUiPlayerBar.OnConfigChanged, SamsUiPlayerBar)
     self:RegisterCallback("OnConfigChanged", SamsUiTargetBar.OnConfigChanged, SamsUiTargetBar)
@@ -56,7 +59,36 @@ function Database:AddNewCharacter(nameRealm)
 end
 
 
+function Database:GetCharacters()
+
+    if not SamsUiCharacters then
+        SamsUiCharacters = {};
+    end
+
+    local i = 0;
+    local keys = {}
+    for k, v in pairs(SamsUiCharacters) do
+        i = i + 1;
+        keys[i] = k;
+    end
+
+    local k = 0;
+    return function()
+        k = k + 1;
+        if k <= i then
+            return keys[k], SamsUiCharacters[keys[k]];
+        end
+    end
+
+end
+
+
 function Database:InsertOrUpdateCharacterInfo(nameRealm, key, newValue)
+
+    if type(nameRealm) ~= "string" then
+        error(string.format("nameRealm value is nil - %s %s", key or "-", newValue or "-"))
+        return;
+    end
 
     if not SamsUiCharacters then
         SamsUiCharacters = {};
@@ -179,46 +211,34 @@ function SamsUiConfigPanelMixin:OnLoad()
 
     end
 
-    --player frame
-    self.playerHealthTextCheckButton:SetScript("OnClick", function()
-        Database:UpdateConfig("showPlayerHealthText", self.playerHealthTextCheckButton:GetChecked())
-    end)
-
-    self.playerHealthTextFormatEditBox:SetScript("OnTextChanged", function()
-        Database:UpdateConfig("playerHealthTextFormat", self.playerHealthTextFormatEditBox:GetText())
-    end)
-
-    self.playerPowerTextCheckButton:SetScript("OnClick", function()
-        Database:UpdateConfig("showPlayerPowerText", self.playerPowerTextCheckButton:GetChecked())
-    end)
-
-    self.playerPowerTextFormatEditBox:SetScript("OnTextChanged", function()
-        Database:UpdateConfig("playerPowerTextFormat", self.playerPowerTextFormatEditBox:GetText())
-    end)
-
-
-    --target frame
-    self.targetHealthTextCheckButton:SetScript("OnClick", function()
-        Database:UpdateConfig("showTargetHealthText", self.targetHealthTextCheckButton:GetChecked())
-    end)
-
-    self.targetHealthTextFormatEditBox:SetScript("OnTextChanged", function()
-        Database:UpdateConfig("targetHealthTextFormat", self.targetHealthTextFormatEditBox:GetText())
-    end)
-
-    self.targetPowerTextCheckButton:SetScript("OnClick", function()
-        Database:UpdateConfig("showTargetPowerText", self.targetPowerTextCheckButton:GetChecked())
-    end)
-
-    self.targetPowerTextFormatEditBox:SetScript("OnTextChanged", function()
-        Database:UpdateConfig("targetPowerTextFormat", self.targetPowerTextFormatEditBox:GetText())
-    end)
-
-
-
-
+    local menu = {
+        {
+            panelName = "Player Bar",
+            func = function()
+                self:ShowPanel("playerBarConfig")
+            end
+        },
+        {
+            panelName = "Target Bar",
+            func = function()
+                self:ShowPanel("targetBarConfig")
+            end
+        },
+        {
+            panelName = "Minimap",
+            func = function()
+                self:ShowPanel("minimapConfig")
+            end
+        },
+    }
+    self.menuListview.DataProvider:InsertTable(menu)
 
     -- this should go else where at some point there are probably more frames to move about though
+
+    self:SetUpMiniMap()
+
+    self:SetUpBuffFrame()
+
     UIWidgetTopCenterContainerFrame:ClearAllPoints()
     UIWidgetTopCenterContainerFrame:SetPoint("TOP", MinimapCluster, "BOTTOM", 9, -10)
 
@@ -228,61 +248,139 @@ function SamsUiConfigPanelMixin:OnLoad()
     MirrorTimer1:ClearAllPoints()
     MirrorTimer1:SetPoint("TOP", MinimapCluster, "BOTTOM", 9, -5)
 
+    UIErrorsFrame:ClearAllPoints()
+    UIErrorsFrame:SetPoint("TOP", MinimapCluster, "BOTTOM", 9, -15)
+
+    local x, y = _G[self:GetName().."Portrait"]:GetSize()
+    _G[self:GetName().."Portrait"]:ClearAllPoints()
+    _G[self:GetName().."Portrait"]:SetPoint("TOPLEFT", self, "TOPLEFT", -8, 10)
+    _G[self:GetName().."Portrait"]:SetSize(x+5, y+ 5)
+    _G[self:GetName().."Portrait"]:SetAtlas("legioninvasion-map-icon-portal-large")
+
    
 end
 
 
+function SamsUiConfigPanelMixin:OnShow()
 
-function SamsUiConfigPanelMixin:LoadConfigVariables()
+end
 
-    --DevTools_Dump({ SamsUiConfig })
+
+function SamsUiConfigPanelMixin:ShowPanel(panel)
+
+    for k, frame in ipairs(self.contentFrame.frames) do
+        frame:Hide()
+    end
+
+    self.contentFrame[panel]:Show()
+end
+
+
+function SamsUiConfigPanelMixin:OnDatabaseInitialised()
+
+    self:LoadPlayerBarPanel()
+    self:LoadTargetBarPanel()
+    self:LoadMinimapPanel()
+
+end
+
+
+function SamsUiConfigPanelMixin:LoadMinimapPanel()
+    
+    local panel = self.contentFrame.minimapConfig;
+
+    _G[panel.numberIconsPerRow:GetName().."Low"]:SetText("1")
+    _G[panel.numberIconsPerRow:GetName().."High"]:SetText("10")
+
+    panel.numberIconsPerRow:SetScript("OnValueChanged", function()
+        _G[panel.numberIconsPerRow:GetName().."Text"]:SetText(string.format("%.0f", panel.numberIconsPerRow:GetValue()))
+        Database:UpdateConfig("numberMinimapIconsPerRow", tonumber(string.format("%.0f", panel.numberIconsPerRow:GetValue())))
+    end)
+
+end
+
+
+function SamsUiConfigPanelMixin:LoadPlayerBarPanel()
+
+    local panel = self.contentFrame.playerBarConfig;
+
+    panel.playerHealthTextCheckButton:SetScript("OnClick", function()
+        Database:UpdateConfig("showPlayerHealthText", panel.playerHealthTextCheckButton:GetChecked())
+    end)
+
+    panel.playerHealthTextFormatEditBox:SetScript("OnTextChanged", function()
+        Database:UpdateConfig("playerHealthTextFormat", panel.playerHealthTextFormatEditBox:GetText())
+    end)
+
+    panel.playerPowerTextCheckButton:SetScript("OnClick", function()
+        Database:UpdateConfig("showPlayerPowerText", panel.playerPowerTextCheckButton:GetChecked())
+    end)
+
+    panel.playerPowerTextFormatEditBox:SetScript("OnTextChanged", function()
+        Database:UpdateConfig("playerPowerTextFormat", panel.playerPowerTextFormatEditBox:GetText())
+    end)
+
 
     --player frame
     if Database:GetConfigValue("showPlayerHealthText") then
-        self.playerHealthTextCheckButton:SetChecked(Database:GetConfigValue("showPlayerHealthText"))
+        panel.playerHealthTextCheckButton:SetChecked(Database:GetConfigValue("showPlayerHealthText"))
     end
 
     if Database:GetConfigValue("playerHealthTextFormat") then
-        self.playerHealthTextFormatEditBox:SetText(Database:GetConfigValue("playerHealthTextFormat"))
+        panel.playerHealthTextFormatEditBox:SetText(Database:GetConfigValue("playerHealthTextFormat"))
     end
 
     if Database:GetConfigValue("showPlayerPowerText") then
-        self.playerPowerTextCheckButton:SetChecked(Database:GetConfigValue("showPlayerPowerText"))
+        panel.playerPowerTextCheckButton:SetChecked(Database:GetConfigValue("showPlayerPowerText"))
     end
 
     if Database:GetConfigValue("playerPowerTextFormat") then
-        self.playerPowerTextFormatEditBox:SetText(Database:GetConfigValue("playerPowerTextFormat"))
+        panel.playerPowerTextFormatEditBox:SetText(Database:GetConfigValue("playerPowerTextFormat"))
     end
+
+end
+
+function SamsUiConfigPanelMixin:LoadTargetBarPanel()
+
+    local panel = self.contentFrame.targetBarConfig;
+
+    --set the widget scripts
+    panel.targetHealthTextCheckButton:SetScript("OnClick", function()
+        Database:UpdateConfig("showTargetHealthText", panel.targetHealthTextCheckButton:GetChecked())
+    end)
+
+    panel.targetHealthTextFormatEditBox:SetScript("OnTextChanged", function()
+        Database:UpdateConfig("targetHealthTextFormat", panel.targetHealthTextFormatEditBox:GetText())
+    end)
+
+    panel.targetPowerTextCheckButton:SetScript("OnClick", function()
+        Database:UpdateConfig("showTargetPowerText", panel.targetPowerTextCheckButton:GetChecked())
+    end)
+
+    panel.targetPowerTextFormatEditBox:SetScript("OnTextChanged", function()
+        Database:UpdateConfig("targetPowerTextFormat", panel.targetPowerTextFormatEditBox:GetText())
+    end)
 
 
     --target frame
     if Database:GetConfigValue("showTargetHealthText") then
-        self.targetHealthTextCheckButton:SetChecked(Database:GetConfigValue("showTargetHealthText"))
+        panel.targetHealthTextCheckButton:SetChecked(Database:GetConfigValue("showTargetHealthText"))
     end
 
     if Database:GetConfigValue("targetHealthTextFormat") then
-        self.targetHealthTextFormatEditBox:SetText(Database:GetConfigValue("targetHealthTextFormat"))
+        panel.targetHealthTextFormatEditBox:SetText(Database:GetConfigValue("targetHealthTextFormat"))
     end
 
     if Database:GetConfigValue("showTargetPowerText") then
-        self.targetPowerTextCheckButton:SetChecked(Database:GetConfigValue("showTargetPowerText"))
+        panel.targetPowerTextCheckButton:SetChecked(Database:GetConfigValue("showTargetPowerText"))
     end
 
     if Database:GetConfigValue("targetPowerTextFormat") then
-        self.targetPowerTextFormatEditBox:SetText(Database:GetConfigValue("targetPowerTextFormat"))
+        panel.targetPowerTextFormatEditBox:SetText(Database:GetConfigValue("targetPowerTextFormat"))
     end
 
 end
 
-
-function SamsUiConfigPanelMixin:Init()
-
-    SetPortraitToTexture(self:GetName().."Portrait", 626006)
-
-    self:SetUpMiniMap()
-
-    self:SetUpBuffFrame()
-end
 
 
 
@@ -321,20 +419,6 @@ end
 
 function SamsUiConfigPanelMixin:OnEvent(event, ...)
 
-    if event == "ADDON_LOADED" then
-        
-        if ... == "Blizzard_TimeManager" then
-            -- TimeManagerClockButton:ClearAllPoints()
-            -- TimeManagerClockButton:SetPoint("LEFT", SamsUiTopBar, "LEFT", 16, 0)
-        end
-
-        Database:Init()
-
-    elseif event == "PLAYER_ENTERING_WORLD" then
-
-        self:Init()
-
-    end
 end
 
 
@@ -387,6 +471,7 @@ function SamsUiTopBarMixin:OnLoad()
             name = name,
             title = title,
             notes = notes,
+            loaded = false,
         })
     end
 
@@ -396,11 +481,7 @@ function SamsUiTopBarMixin:OnLoad()
         self.mainMenu:SetShown(not self.mainMenu:IsVisible())
     end)
 
-    -- self.mainMenu:SetScript("OnHide", function()
-    --     for _, button in ipairs(self.mainMenu.buttons) do
-    --         --button:Hide()
-    --     end
-    -- end)
+
     self.mainMenu:SetScript("OnShow", function()
         self:OpenMainMenu()
     end)
@@ -411,21 +492,96 @@ function SamsUiTopBarMixin:OnLoad()
 
     self.minimapButtonsContainer:SetScript("OnHide", function()
         self.minimapButtonsContainer:SetAlpha(0)
-        self.minimapButtonsContainer:SetPoint("TOPRIGHT", -150, -9)
+        self.minimapButtonsContainer:SetPoint("TOPRIGHT", self.openMinimapButtonsButton, "TOPRIGHT", -50, -9)
     end)
 
     self.minimapButtonsContainer.anim.translate:SetScript("OnFinished", function()
-        self.minimapButtonsContainer:SetPoint("TOPRIGHT", -150, -49)
+        self.minimapButtonsContainer:SetPoint("TOPRIGHT", self.openMinimapButtonsButton, "TOPRIGHT", -50, -54)
     end)
+
+
+    self:UpdateCurrency()
+    self.openCurrencyButton:SetScript("OnEnter", function()        
+        GameTooltip:SetOwner(self.openCurrencyButton, 'ANCHOR_BOTTOM')
+        GameTooltip:AddLine("Gold")
+        local totalGold = 0;
+
+        for name, character in Database:GetCharacters() do
+            local r, g, b, argbHex = GetClassColor(character.class)
+            GameTooltip:AddDoubleLine(name, GetCoinTextureString(character.gold), r, g, b, 1, 1, 1)
+
+            totalGold = totalGold + character.gold
+        end
+
+        GameTooltip:AddLine(" ")
+        GameTooltip:AddDoubleLine("Total", GetCoinTextureString(totalGold), 1, 1, 1, 1, 1, 1)
+
+        GameTooltip:Show()
+    end)
+    self.openCurrencyButton:SetScript("OnLeave", function()
+        GameTooltip_SetDefaultAnchor(GameTooltip, UIParent)
+    end)
+
+    self:RegisterEvent("ADDON_LOADED")
+    self:RegisterEvent("PLAYER_MONEY")
+    self:RegisterEvent("PLAYER_ENTERING_WORLD")
+
+
+end
+
+
+function SamsUiTopBarMixin:OnEvent(event, ...)
+
+    if event == "ADDON_LOADED" then
+        
+        C_Timer.After(1, function()
+            self:MoveAllLibMinimapIcons()
+        end)
+
+    end
+
+    if event == "PLAYER_ENTERING_WORLD" then
+
+        local name, realm = UnitFullName("player")
+        self.nameRealm = string.format("%s-%s", name, realm)
+
+        Database:Init()
+    end
+
+    if event == "PLAYER_MONEY" then
+        self:UpdateCurrency()
+    end
+end
+
+
+
+function SamsUiTopBarMixin:OnDatabaseInitialised()
+
+    self:UpdateCurrency()
+
+    local _, class = UnitClass("player")
+    Database:InsertOrUpdateCharacterInfo(self.nameRealm, "class", class)
+
+end
+
+
+function SamsUiTopBarMixin:UpdateCurrency()
+
+    if type(self.nameRealm) ~= "string" then
+        return;
+    end
+
+    local gold = GetMoney();
+    self.openCurrencyButton.text:SetText(GetCoinTextureString(gold))
+
+    Database:InsertOrUpdateCharacterInfo(self.nameRealm, "gold", gold)
 
 end
 
 
 function SamsUiTopBarMixin:OpenMinimapButtonsMenu()
 
-    if self.minimapButtonsMoved == false then
-        self:MoveAllLibMinimapIcons()
-    end
+    self:MoveAllLibMinimapIcons()
 
     if self.minimapButtonsContainer:IsVisible() then
         return;
@@ -484,23 +640,64 @@ function SamsUiTopBarMixin:MoveAllLibMinimapIcons()
         end
     end
 
-    local yPos = 0;
-    local NUM_ICONS_PER_ROWS = 5;
-    for k, button in ipairs(buttons) do
-        button:ClearAllPoints()
-        button:SetParent(self.minimapButtonsContainer)
-        button:Show()
-        --if button:IsVisible() then
-            button:SetPoint("LEFT", self.minimapButtonsContainer, "LEFT", yPos, 0)
-            yPos = yPos + button:GetWidth()
-        --end
-        lib:Lock(buttonNames[k])
-        self.minimapButtons[k] = button
+    local NUM_ICONS_PER_ROWS = Database:GetConfigValue("numberMinimapIconsPerRow") or 6;
+    local rowsRequired = math.ceil(#buttons / NUM_ICONS_PER_ROWS)
+    local k = 1;
+    local xPos, yPos = 0, 0;
+    local maxButtonHeight = 0;
+
+    for rowIndex = 1, rowsRequired do
+
+        local newRow = true;
+
+        for i = 1, NUM_ICONS_PER_ROWS do
+            local buttonIndex = i + ((rowIndex - 1) * NUM_ICONS_PER_ROWS)
+            if buttons[buttonIndex] then
+                local button = buttons[buttonIndex]
+                
+                button:ClearAllPoints()
+                button:SetParent(self.minimapButtonsContainer)
+                button:Show()
+
+                if button:GetHeight() > maxButtonHeight then
+                    maxButtonHeight = button:GetHeight()
+                end
+
+                xPos = xPos + maxButtonHeight;
+
+                button:SetPoint("CENTER", self.minimapButtonsContainer, "TOPLEFT", xPos, -yPos)
+
+                
+                if newRow == true then
+                    button:SetPoint("TOPLEFT", self.minimapButtonsContainer, "TOPLEFT", 0, -yPos)
+                    newRow = false;
+                else
+                    button:SetPoint("LEFT", self.minimapButtons[k-1], "RIGHT", 4, 0)
+                end
+
+
+                if buttonNames[k] then
+                    lib:Lock(buttonNames[k])
+                else
+                    button:SetScript("OnDragStart", nil)
+                    button:SetScript("OnDragStop", nil)
+                    button:SetMovable(false)
+                end
+                self.minimapButtons[k] = button
+
+                self.minimapButtonsContainer:SetWidth(xPos)
+
+                k = k + 1;
+            end
+        end
+
+        yPos = yPos + maxButtonHeight;
+        xPos = 0;
+
+        self.minimapButtonsContainer:SetHeight(yPos)
     end
 
-    self.minimapButtonsContainer:SetWidth(yPos)
-
-    self.minimapButtonsMoved = true;
+    self.minimapButtonsContainer:SetWidth(maxButtonHeight * NUM_ICONS_PER_ROWS)
 
 end
 
