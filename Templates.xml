@@ -53,10 +53,15 @@
 
 
     <Button name="SamsUiTopBarMainMenuButton" mixin="SamsUiTopBarMainMenuButtonMixin" inherits="InsecureActionButtonTemplate" registerForClicks="LeftButtonUp,RightButtonUp" virtual="true">
-        <!-- <NormalTexture atlas="garrlanding-mission-inprogress"/>
+        
+        <!-- <NormalTexture file="Interface/PetBattles/PetBattleHUDAtlas">
+            <TexCoords left="0" right="0.38328" top="0.5209" bottom="0.6089"/>
+        </NormalTexture>
         <PushedTexture atlas="garrlanding-mission-inprogress"/> -->
-        <NormalTexture atlas="GarrMission_FollowerListButton"/>
-        <PushedTexture atlas="GarrMission_FollowerListButton"/>
+
+        <NormalTexture atlas="PetList-ButtonBackground"/>
+        <PushedTexture atlas="PetList-ButtonBackground"/>
+
         <HighlightTexture atlas="PetList-ButtonHighlight"/>
         <Animations>
             <AnimationGroup parentKey="anim" setToFinalAlpha="true">
@@ -121,4 +126,57 @@
             <OnClick method="OnClick"/>
         </Scripts>
     </Button>
+
+
+
+    <Frame name="SamsUiConfigPanelDatabaseControlListviewItemTemplate" mixin="SamsUiConfigPanelDatabaseControlListviewItemTemplateMixin" enableMouse="true" virtual="true">
+
+        <Layers>
+            <Layer level="HIGHLIGHT">
+                <Texture parentKey="highlight" setAllPoints="true" atlas="search-highlight-large"/>
+            </Layer>
+            <Layer level="OVERLAY">
+                <FontString parentKey="name" inherits="GameFontNormal" justifyH="LEFT">
+                    <Size x="220"/>
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="LEFT" x="0" y="0"/>
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="class" inherits="GameFontNormal" justifyH="LEFT">
+                    <Size x="100"/>
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="LEFT" relativeKey="$parent.name" relativePoint="RIGHT" x="2" y="0"/>
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="level" inherits="GameFontNormal" justifyH="LEFT">
+                    <Size x="60"/>
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="LEFT" relativeKey="$parent.class" relativePoint="RIGHT" x="2" y="0"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+			<Layer level="ARTWORK">
+
+			</Layer>
+        </Layers>
+
+        <Frames>
+            <Button parentKey="delete" >
+                <NormalTexture atlas="transmog-icon-remove"/>
+                <PushedTexture atlas="transmog-icon-remove"/>
+                <HighlightTexture atlas="transmog-frame-red"/>
+                <Size x="22" y="22"/>
+                <Anchors>
+                    <Anchor point="RIGHT" x="-10" y="0"/>
+                </Anchors>
+            </Button>
+        </Frames>
+
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+        </Scripts>
+    </Frame>
 </UI>

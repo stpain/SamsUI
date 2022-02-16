@@ -203,3 +203,34 @@ function SamsUiListviewMixin:OnElementSelectionChanged(elementData, selected)
         self:TriggerEvent("OnSelectionChanged", elementData, selected);
     end
 end
+
+
+
+
+
+
+SamsUiConfigPanelDatabaseControlListviewItemTemplateMixin = {}
+function SamsUiConfigPanelDatabaseControlListviewItemTemplateMixin:OnLoad()
+
+end
+
+
+function SamsUiConfigPanelDatabaseControlListviewItemTemplateMixin:SetDataBinding(binding, height)
+
+    self:SetHeight(height)
+
+    for k, v in pairs(binding) do
+        if self[k] then
+            self[k]:SetText(v)
+        end
+    end
+
+    self.delete:SetScript("OnClick", function()
+        binding.deleteFunc(nil, binding.name)
+    end)
+end
+
+
+function SamsUiConfigPanelDatabaseControlListviewItemTemplateMixin:ResetDataBinding()
+
+end

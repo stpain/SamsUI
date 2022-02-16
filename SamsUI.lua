@@ -17,6 +17,7 @@ local Database = CreateFromMixins(CallbackRegistryMixin)
 Database:GenerateCallbackEvents({
     "OnConfigChanged",
     "OnInitialised",
+    "OnCharacterRemoved",
 });
 
 function Database:Init()
@@ -41,6 +42,8 @@ function Database:Init()
     self:RegisterCallback("OnConfigChanged", SamsUiPlayerBar.OnConfigChanged, SamsUiPlayerBar)
     self:RegisterCallback("OnConfigChanged", SamsUiTargetBar.OnConfigChanged, SamsUiTargetBar)
 
+    self:RegisterCallback("OnCharacterRemoved", SamsUiConfigPanel.LoadDatabasePanel, SamsUiConfigPanel)
+
     self:TriggerEvent("OnInitialised")
 
 end
@@ -56,6 +59,26 @@ function Database:AddNewCharacter(nameRealm)
         SamsUiCharacters[nameRealm] = {};
     end
 
+end
+
+
+function Database:RemoveCharacter(nameRealm)
+
+    if not SamsUiCharacters then
+        return;
+    end
+
+    local name, realm = UnitFullName("player")
+    if nameRealm == string.format("%s-%s", name, realm) then
+        print(string.format("unable to delete current character %s", nameRealm))
+        return;
+    end
+
+    if SamsUiCharacters[nameRealm] then
+        SamsUiCharacters[nameRealm] = nil;
+
+        Database:TriggerEvent("OnCharacterRemoved")
+    end
 end
 
 
@@ -106,19 +129,23 @@ end
 function Database:GetCharacterInfo(nameRealm, key)
 
     if type(SamsUiCharacters) ~= "table" then
-        error("SamsUiCharacter table doesnt exist")
+        print("SamsUiCharacter table doesnt exist")
+        return false;
     end
 
     if not SamsUiCharacters[nameRealm] then
-        error(string.format("SamsUiCharacter[%s] table doesnt exist", nameRealm))
+        print(string.format("SamsUiCharacter[%s] table doesnt exist", nameRealm))
+        return false;
     end
 
     if SamsUiCharacters[nameRealm][key] then
         return SamsUiCharacters[nameRealm][key];
     else
-        error(string.format("unable to find [%s] in SamsUiCharacter[%s] table", key, nameRealm))
+        print(string.format("unable to find [%s] in SamsUiCharacter[%s] table", key, nameRealm))
+        return false;
     end
 
+    return false;
 end
 
 
@@ -230,6 +257,12 @@ function SamsUiConfigPanelMixin:OnLoad()
                 self:ShowPanel("minimapConfig")
             end
         },
+        {
+            panelName = "Database",
+            func = function()
+                self:ShowPanel("databaseControl")
+            end
+        },
     }
     self.menuListview.DataProvider:InsertTable(menu)
 
@@ -282,7 +315,22 @@ function SamsUiConfigPanelMixin:OnDatabaseInitialised()
     self:LoadPlayerBarPanel()
     self:LoadTargetBarPanel()
     self:LoadMinimapPanel()
+    self:LoadDatabasePanel()
 
+end
+
+
+function SamsUiConfigPanelMixin:LoadDatabasePanel()
+
+    self.contentFrame.databaseControl.listview.DataProvider:Flush()
+
+    for name, character in Database:GetCharacters() do
+        self.contentFrame.databaseControl.listview.DataProvider:Insert({
+            name = name,
+            class = character.class,
+            deleteFunc = Database.RemoveCharacter,
+        })
+    end
 end
 
 
@@ -439,6 +487,29 @@ SamsUiTopBarMixin:GenerateCallbackEvents({
 
 });
 SamsUiTopBarMixin.minimapButtonsMoved = false;
+SamsUiTopBarMixin.inventorySlots = {
+    "HEADSLOT",
+    "NECKSLOT",
+    "SHOULDERSLOT",
+    "BACKSLOT",
+    "CHESTSLOT",
+    "SHIRTSLOT",
+    "TABARDSLOT",
+    "WRISTSLOT",
+    "MAINHANDSLOT",
+    "RANGEDSLOT",
+    "HANDSSLOT",
+    "WAISTSLOT",
+    "LEGSSLOT",
+    "FEETSLOT",
+    "FINGER0SLOT",
+    "FINGER1SLOT",
+    "TRINKET0SLOT",
+    "TRINKET1SLOT",
+    "MAINHANDSLOT",
+    "SECONDARYHANDSLOT",
+    "RANGEDSLOT",
+}
 
 function SamsUiTopBarMixin:OnLoad()
 
@@ -530,9 +601,20 @@ function SamsUiTopBarMixin:OnLoad()
         GameTooltip:AddLine(" ")
         local totalGold = 0;
 
+        local characters = {}
         for name, character in Database:GetCharacters() do
+            table.insert(characters, {
+                name = name,
+                class = character.class,
+                gold = character.gold,
+            })
+        end
+        table.sort(characters, function(a,b)
+            return a.gold > b.gold;
+        end)
+        for k, character in ipairs(characters) do
             local r, g, b, argbHex = GetClassColor(character.class)
-            GameTooltip:AddDoubleLine(name, GetCoinTextureString(character.gold), r, g, b, 1, 1, 1)
+            GameTooltip:AddDoubleLine(character.name, GetCoinTextureString(character.gold), r, g, b, 1, 1, 1)
 
             totalGold = totalGold + character.gold
         end
@@ -544,6 +626,36 @@ function SamsUiTopBarMixin:OnLoad()
     end)
     self.openCurrencyButton:SetScript("OnLeave", function()
         GameTooltip_SetDefaultAnchor(GameTooltip, UIParent)
+    end)
+
+
+    self.openDurabilityButton:SetScript("OnEnter", function()        
+        GameTooltip:SetOwner(self.openDurabilityButton, 'ANCHOR_BOTTOM')
+
+        self:UpdateDurability()
+
+        GameTooltip:AddLine("Durability")
+
+        for k, item in ipairs(self.durabilityInfo) do
+            
+            local percent = math.floor((item.currentDurability/item.maximumDurability)*100)
+
+            local r = (percent > 50 and 1 - 2 * (percent - 50) / 100.0 or 1.0);
+            local g = (percent > 50 and 1.0 or 2 * percent / 100.0);
+            local b = 0.0;
+
+            if item.itemLink ~= "-" then
+                --GameTooltip:AddDoubleLine(item.itemLink, string.format("|cffffffff[%s|cffffffff]", CreateColor(r, g, b):WrapTextInColorCode(item.currentDurability.."/"..item.maximumDurability.." - "..percent)))
+                GameTooltip:AddDoubleLine(item.itemLink, string.format("|cffffffff[%s|cffffffff]", CreateColor(r, g, b):WrapTextInColorCode(percent.."%")))
+            end
+
+        end
+
+        GameTooltip:Show()
+    end)
+    self.openDurabilityButton:SetScript("OnLeave", function()        
+        GameTooltip_SetDefaultAnchor(GameTooltip, UIParent)
+
     end)
 
     self:RegisterEvent("ADDON_LOADED")
@@ -605,11 +717,28 @@ end
 
 function SamsUiTopBarMixin:UpdateDurability()
 
+    self.durabilityInfo = {};
+
     local currentDurability, maximumDurability = 0, 0;
     for i = 1, 19 do
-        local current, maximum = GetInventoryItemDurability(i)
-        currentDurability = currentDurability + (current or 0);
-        maximumDurability = maximumDurability + (maximum or 0);
+        local slotId = GetInventorySlotInfo(self.inventorySlots[i])
+        local itemLink = GetInventoryItemLink("player", slotId)
+        if itemLink then
+            local current, maximum = GetInventoryItemDurability(i)
+            self.durabilityInfo[i] = {
+                itemLink = itemLink,
+                currentDurability = current or 1,
+                maximumDurability = maximum or 1,
+            }
+            currentDurability = currentDurability + (current or 0);
+            maximumDurability = maximumDurability + (maximum or 0);
+        else
+            self.durabilityInfo[i] = {
+                itemLink = "-",
+                currentDurability = 1,
+                maximumDurability = 1,
+            }
+        end
     end
 
     local durability = tonumber(string.format("%.1f", (currentDurability / maximumDurability) * 100));
@@ -767,8 +896,8 @@ function SamsUiTopBarMixin:OpenMainMenu()
 
         if not self.mainMenu.buttons[k] then
             local button = CreateFrame("BUTTON", nil, self.mainMenu, "SamsUiTopBarMainMenuButton")
-            button:SetPoint("TOP", 0, (k-1)*-31)
-            button:SetSize(200, 30)
+            button:SetPoint("TOP", 0, (k-1)*-41)
+            button:SetSize(200, 40)
             button:SetText(item)
 
             if self.mainMenu.menu[item].macro then

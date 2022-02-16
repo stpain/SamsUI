@@ -586,6 +586,49 @@
                         </Frames>
                     </Frame>
 
+                    <Frame parentKey="databaseControl" parentArray="frames" setAllPoints="true" hidden="true">
+
+                        <Frames>
+
+                            <Frame parentKey="listview" inherits="SamsUiListviewTemplate">
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="6" y="-30"/>
+                                    <Anchor point="BOTTOMRIGHT" x="-4" y="4"/>
+                                </Anchors>
+
+                                <Layers>
+                                    <Layer level="OVERLAY">
+                                        <FontString inherits="GameFontNormalLarge" text="Character">
+                                            <!-- <Color r="1" g="1" b="1"/> -->
+                                            <Anchors>
+                                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="9" y="0"/>
+                                            </Anchors>
+                                        </FontString>
+                                        <FontString inherits="GameFontNormalLarge" text="Class">
+                                            <!-- <Color r="1" g="1" b="1"/> -->
+                                            <Anchors>
+                                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="230" y="0"/>
+                                            </Anchors>
+                                        </FontString>
+                                        <FontString inherits="GameFontNormalLarge" text="Delete">
+                                            <!-- <Color r="1" g="1" b="1"/> -->
+                                            <Anchors>
+                                                <Anchor point="BOTTOMRIGHT" relativePoint="TOPRIGHT" x="0" y="0"/>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers>
+
+                                <KeyValues>
+                                    <KeyValue key="frameType" value="FRAME" type="string"/>
+                                    <KeyValue key="itemTemplate" value="SamsUiConfigPanelDatabaseControlListviewItemTemplate" type="string"/>
+                                    <KeyValue key="elementHeight" value="22" type="number"/>
+                                    <KeyValue key="isSelectable" value="true" type="boolean"/>
+                                </KeyValues>
+                            </Frame>
+                        </Frames>
+                    </Frame>
+
                 </Frames>
             </Frame>
 
