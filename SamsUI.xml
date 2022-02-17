@@ -108,6 +108,23 @@
 
             </Frame>
 
+
+            <Button parentKey="openFoodAndDrinkButton" registerForClicks="LeftButtonUp">
+                <Size x="28" y="28"/>
+                <Anchors>
+                    <Anchor point="RIGHT" x="-300" y="0"/>
+                </Anchors>
+                <NormalTexture atlas="food"/>
+                <PushedTexture atlas="food"/>
+                <HighlightTexture atlas="chatframe-button-highlightalert"/>
+            </Button>
+
+            <Frame parentKey="foodAndDrinkMenuContainer" hidden="true">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.openFoodAndDrinkButton" relativePoint="BOTTOM" x="0" y="-10"/>
+                </Anchors>
+            </Frame>
+
         </Frames>
 
         <Scripts>

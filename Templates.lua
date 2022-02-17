@@ -9,7 +9,7 @@ function SamsUiTopBarMainMenuButtonMixin:SetText(text)
 end
 
 function SamsUiTopBarMainMenuButtonMixin:SetIconAtlas(atlas)
-    --self.icon:SetAtlas(atlas)
+    self.icon:SetAtlas(atlas)
 end
 
 function SamsUiTopBarMainMenuButtonMixin:OnLoad()
@@ -17,9 +17,7 @@ function SamsUiTopBarMainMenuButtonMixin:OnLoad()
 end
 
 function SamsUiTopBarMainMenuButtonMixin:OnShow()
-
     self.anim:Play()
-    
 end
 
 function SamsUiTopBarMainMenuButtonMixin:OnHide()
@@ -32,9 +30,55 @@ function SamsUiTopBarMainMenuButtonMixin:OnMouseDown()
     end
 end
 
-function SamsUiTopBarMainMenuButtonMixin:OnClick()
 
+
+
+
+
+
+
+SamsUiTopBarFoodAndDrinkMenuButtonMixin = {}
+
+function SamsUiTopBarFoodAndDrinkMenuButtonMixin:SetItem(item)
+    self.link:SetText(item.link)
+    self.count:SetText(item.count)
+    self.icon:SetTexture(item.icon)
+
+    self:SetAttribute("macrotext1", string.format("/use %s", item.name))
 end
+
+
+function SamsUiTopBarFoodAndDrinkMenuButtonMixin:OnShow()
+    self.anim:Play()
+end
+
+function SamsUiTopBarFoodAndDrinkMenuButtonMixin:OnHide()
+    self:SetAlpha(0)
+end
+
+function SamsUiTopBarFoodAndDrinkMenuButtonMixin:OnEnter()
+    
+    if self.itemLink then
+        GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
+        GameTooltip:SetHyperlink(self.itemLink)
+        GameTooltip:Show()
+    end
+end
+
+function SamsUiTopBarFoodAndDrinkMenuButtonMixin:OnLeave()
+    GameTooltip_SetDefaultAnchor(GameTooltip, UIParent)
+end
+
+function SamsUiTopBarFoodAndDrinkMenuButtonMixin:OnLoad()
+    --self:SetAlpha(0)
+end
+
+function SamsUiTopBarFoodAndDrinkMenuButtonMixin:OnMouseDown()
+    if self.func then
+        self.func()
+    end
+end
+
 
 
 

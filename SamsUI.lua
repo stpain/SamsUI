@@ -464,7 +464,7 @@ function SamsUiConfigPanelMixin:SetUpMiniMap()
 
     MiniMapWorldMapButton:Hide()
     MiniMapWorldMapButton:SetScript("OnShow", function()
-        MiniMapWorldMapButton:Hide()
+        --MiniMapWorldMapButton:Hide()
     end)
 
 end
@@ -655,8 +655,16 @@ function SamsUiTopBarMixin:OnLoad()
     end)
     self.openDurabilityButton:SetScript("OnLeave", function()        
         GameTooltip_SetDefaultAnchor(GameTooltip, UIParent)
-
     end)
+
+
+    self.openFoodAndDrinkButton:SetScript("OnClick", function()
+        self:OpenFoodAndDrinkMenu()
+    end)
+
+
+
+
 
     self:RegisterEvent("ADDON_LOADED")
     self:RegisterEvent("PLAYER_MONEY")
@@ -715,6 +723,128 @@ function SamsUiTopBarMixin:OnDatabaseInitialised()
 end
 
 
+
+function SamsUiTopBarMixin:OpenFoodAndDrinkMenu()
+
+    if self.foodAndDrinkMenuContainer:IsVisible() then
+        return;
+    end
+
+    if self.closeFoodAndDrinkMenuTicker then
+        self.closeFoodAndDrinkMenuTicker:Cancel()
+    end
+
+    self:ScanBagsForFoodAndDrink()
+
+    if not self.foodAndDrinkMenuButtons then
+        self.foodAndDrinkMenuButtons = {}
+    end
+
+    for k, button in ipairs(self.foodAndDrinkMenuButtons) do
+        button:Hide()
+    end
+
+    --DevTools_Dump({self.foodAndDrink})
+
+    for k, item in ipairs(self.foodAndDrink) do
+        
+        if not self.foodAndDrinkMenuButtons[k] then
+            
+            local button = CreateFrame("BUTTON", nil, self.foodAndDrinkMenuContainer, "SamsUiTopBarFoodAndDrinkMenuButton")
+
+            button:SetPoint("TOP", 0, (k-1) * -31)
+            button:SetSize(250, 32)
+
+            button:SetAttribute("type1", "macro")
+
+            button.itemLink = item.link;
+            button:SetItem(item)
+
+            button.anim.fadeIn:SetStartDelay(k/25)
+
+            button:Show()
+
+            self.foodAndDrinkMenuButtons[k] = button;
+
+        else
+
+            local button = self.foodAndDrinkMenuButtons[k]
+
+            button.itemLink = item.link;
+            button:SetItem(item)
+
+            button:Show()
+
+        end
+
+        self.foodAndDrinkMenuContainer:SetSize(250, 33*k)
+        self.foodAndDrinkMenuContainer:Show()
+    end
+
+
+    self.closeFoodAndDrinkMenuTicker = C_Timer.NewTicker(2.5, function()
+        if self.foodAndDrinkMenuContainer:IsMouseOver() == false and self.openFoodAndDrinkButton:IsMouseOver() == false then
+            local isHovered = false;
+            for k, button in ipairs(self.foodAndDrinkMenuButtons) do
+                if button:IsMouseOver() == true then
+                    isHovered = true;
+                end
+            end
+            if isHovered == false then
+                self.foodAndDrinkMenuContainer:Hide()
+                self.closeFoodAndDrinkMenuTicker:Cancel()
+            end
+        end
+    end)
+
+end
+
+
+function SamsUiTopBarMixin:ScanBagsForFoodAndDrink()
+
+    self.foodAndDrink = {}
+
+    local foodsAdded = {}
+    for bag = 0, 4 do
+        for slot = 1, GetContainerNumSlots(bag) do
+            local icon, itemCount, locked, quality, readable, lootable, itemLink, isFiltered, noValue, itemID = GetContainerItemInfo(bag, slot)
+            --local itemLink = GetContainerItemLink(bag, slot)
+            if itemID then
+                local _, itemType, itemSubType, itemEquipLoc, icon, itemClassID, itemSubClassID = GetItemInfoInstant(itemID)
+                local itemName, _, itemQuality, itemLevel = GetItemInfo(itemID)
+                if itemClassID == 0 and itemSubClassID == 5 then
+                    if not foodsAdded[itemID] then
+                        table.insert(self.foodAndDrink, {
+                            icon = icon,
+                            link = itemLink,
+                            count = itemCount,
+                            name = itemName,
+                            ilvl = itemLevel or -1,
+                        })
+                        foodsAdded[itemID] = true;
+                    else
+                        for _, food in ipairs(self.foodAndDrink) do
+                            if food.name == itemName then
+                                food.count = food.count + itemCount;
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+    if self.foodAndDrink and #self.foodAndDrink > 0 then
+        table.sort(self.foodAndDrink, function(a,b)
+            if a.ilvl == b.ilvl then
+                return a.count > b.count
+            else
+                return a.ilvl > b.ilvl
+            end
+        end)
+    end
+end
+
+
 function SamsUiTopBarMixin:UpdateDurability()
 
     self.durabilityInfo = {};
@@ -743,7 +873,7 @@ function SamsUiTopBarMixin:UpdateDurability()
 
     local durability = tonumber(string.format("%.1f", (currentDurability / maximumDurability) * 100));
 
-    self.openDurabilityButton:SetText(string.format("%s %%", durability))
+    self.openDurabilityButton:SetText(string.format("%s %s %%", CreateAtlasMarkup("vehicle-hammergold", 18, 18), durability))
 
 end
 

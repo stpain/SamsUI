@@ -19,9 +19,6 @@
 
 
     <Button name="SamsUiTopBarDropdownMenuButton" mixin="SamsUiTopBarDropdownMenuButtonMixin" virtual="true">
-        <Attributes>
-            <Attribute name="type1" value="macro"/>
-        </Attributes>
         <NormalTexture atlas="auctionhouse-ui-dropdown-arrow-up"/>
         <PushedTexture atlas="auctionhouse-ui-dropdown-arrow-down"/>
         <HighlightTexture atlas="chatframe-button-highlightalert"/>
@@ -36,7 +33,7 @@
 
         <Layers>
             <Layer level="OVERLAY">
-                <FontString parentKey="text" inherits="GameFontNormalSmall">
+                <FontString parentKey="text" inherits="GameFontNormal">
                     <Color r="1" g="1" b="1"/>
                     <Anchors>
                         <Anchor point="CENTER" x="0" y="0"/>
@@ -49,6 +46,54 @@
             <OnLoad method="OnLoad"/>
             <OnShow method="OnShow"/>
         </Scripts>
+    </Button>
+
+
+    <Button name="SamsUiTopBarFoodAndDrinkMenuButton" mixin="SamsUiTopBarFoodAndDrinkMenuButtonMixin" inherits="InsecureActionButtonTemplate" registerForClicks="LeftButtonUp,RightButtonUp" virtual="true">
+
+        <NormalTexture atlas="groupfinder-button-cover"/>
+        <PushedTexture atlas="groupfinder-button-cover-down"/>
+
+        <HighlightTexture atlas="search-highlight-large"/>
+        <Animations>
+            <AnimationGroup parentKey="anim" setToFinalAlpha="true">
+                <Alpha parentKey="fadeIn" duration="0.33" fromAlpha="0" toAlpha="1" smoothing="OUT"/>
+                <!-- <Translation parentKey="translate" duration="1" offsetX="0" offsetY="-28" smoothing="OUT"/> -->
+            </AnimationGroup>
+        </Animations>
+
+        <Layers>
+            <Layer level="OVERLAY">
+                <FontString parentKey="link" inherits="GameFontNormal">
+                    <Anchors>
+                        <Anchor point="CENTER" x="0" y="0"/>
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="count" inherits="GameFontNormal">
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="RIGHT" x="-6" y="0"/>
+                    </Anchors>
+                </FontString>
+
+                <Texture parentKey="icon">
+                    <Size x="22" y="22"/>
+                    <Anchors>
+                        <Anchor point="LEFT" x="6" y="0"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+            <OnMouseDown method="OnMouseDown"/>
+            <OnShow method="OnShow"/>
+            <OnHide method="OnHide"/>
+            <OnEnter method="OnEnter"/>
+            <OnLeave method="OnLeave"/>
+        </Scripts>
+
     </Button>
 
 
