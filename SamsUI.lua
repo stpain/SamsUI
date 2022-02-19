@@ -8,11 +8,49 @@
 local name, addon = ...
 
 
+local tradeskillNamesToIDs = {
+    ["Alchemy"] = 171,
+    ["Blacksmithing"] = 164,
+    ["Enchanting"] = 333,
+    ["Engineering"] = 202,
+    ["Inscription"] = 773,
+    ["Jewelcrafting"] = 755,
+    ["Leatherworking"] = 165,
+    ["Tailoring"] = 197,
+    ["Mining"] = 186,
+    ["Herbalism"] = 182,
+    ["Skinning"] = 393,
+}
+
+local Util = {}
+function Util:FormatStatsusBarTags(t, s, cur, _max, per)
+    s = s:gsub("{cur}", cur)
+    s = s:gsub("{max}", _max)
+    s = s:gsub("{per}", per)
+    t:SetText(s)
+end
+
+
+
+--[[
+    set up the mixins now so all accessible
+]]
 SamsUiConfigPanelMixin = CreateFromMixins(CallbackRegistryMixin)
 SamsUiTopBarMixin = CreateFromMixins(CallbackRegistryMixin);
 SamsUiPlayerBarMixin = CreateFromMixins(CallbackRegistryMixin);
 SamsUiTargetBarMixin = CreateFromMixins(CallbackRegistryMixin);
 
+
+
+
+
+
+
+--[[
+    database mixin
+
+    takes care of setting and getting info to/from saved variables
+]]
 local Database = CreateFromMixins(CallbackRegistryMixin)
 Database:GenerateCallbackEvents({
     "OnConfigChanged",
@@ -32,7 +70,8 @@ function Database:Init()
         SamsUiCharacters = {};
     end
 
-    --self:AddNewConfigOption("numberMinimapIconsPerRow", 6)
+    self:AddNewConfigOption("welcomeGuildMembersOnLoginMessageArray", "Hi,Hello,Hey")
+    self:AddNewConfigOption("welcomeGuildMembersOnLogin", true)
 
     self:RegisterCallback("OnInitialised", SamsUiConfigPanel.OnDatabaseInitialised, SamsUiConfigPanel)
     self:RegisterCallback("OnInitialised", SamsUiPlayerBar.LoadConfigVariables, SamsUiPlayerBar)
@@ -168,7 +207,7 @@ function Database:AddNewConfigOption(setting, val)
         SamsUiConfig = {}
     end
 
-    if SamsUiConfig[setting] == nil then
+    if not SamsUiConfig[setting] then
         SamsUiConfig[setting] = val;
     end
     
@@ -197,13 +236,6 @@ end
 
 
 
-local Util = {}
-function Util:FormatStatsusBarTags(t, s, cur, _max, per)
-    s = s:gsub("{cur}", cur)
-    s = s:gsub("{max}", _max)
-    s = s:gsub("{per}", per)
-    t:SetText(s)
-end
 
 
 
@@ -213,11 +245,11 @@ end
 
 
 
+--[[
+    config panel mixin
 
-
-
-
-
+    this is the ui for adjusting settings
+]]
 SamsUiConfigPanelMixin:GenerateCallbackEvents({
 
 });
@@ -228,6 +260,7 @@ function SamsUiConfigPanelMixin:OnLoad()
 
     self:RegisterEvent("ADDON_LOADED")
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
+    self:RegisterEvent("CHAT_MSG_SYSTEM")
 
     SLASH_SAMSUI1 = "/sui"
     SlashCmdList.SAMSUI = function(msg)
@@ -239,6 +272,12 @@ function SamsUiConfigPanelMixin:OnLoad()
     end
 
     local menu = {
+        {
+            panelName = "General",
+            func = function()
+                self:ShowPanel("generalConfig")
+            end
+        },
         {
             panelName = "Player Bar",
             func = function()
@@ -316,7 +355,26 @@ function SamsUiConfigPanelMixin:OnDatabaseInitialised()
     self:LoadTargetBarPanel()
     self:LoadMinimapPanel()
     self:LoadDatabasePanel()
+    self:LoadGeneralPanel()
 
+end
+
+
+function SamsUiConfigPanelMixin:LoadGeneralPanel()
+
+    local panel = self.contentFrame.generalConfig;
+
+    if Database:GetConfigValue("welcomeGuildMembersOnLogin") then
+        panel.welcomeGuildMembersOnLoginCheckButton:SetChecked("welcomeGuildMembersOnLogin")
+    end
+
+    if Database:GetConfigValue("welcomeGuildMembersOnLoginMessageArray") then
+        panel.welcomeGuildMembersOnLoginMessageArrayEditBox:SetText(Database:GetConfigValue("welcomeGuildMembersOnLoginMessageArray"))
+    end
+
+    panel.welcomeGuildMembersOnLoginMessageArrayEditBox:SetScript("OnTextChanged", function()
+        Database:UpdateConfig("welcomeGuildMembersOnLoginMessageArray", panel.welcomeGuildMembersOnLoginMessageArrayEditBox:GetText())
+    end)
 end
 
 
@@ -328,6 +386,9 @@ function SamsUiConfigPanelMixin:LoadDatabasePanel()
         self.contentFrame.databaseControl.listview.DataProvider:Insert({
             name = name,
             class = character.class,
+            level = character.level,
+            profession1 = character.profession1,
+            profession2 = character.profession2,
             deleteFunc = Database.RemoveCharacter,
         })
     end
@@ -464,14 +525,53 @@ function SamsUiConfigPanelMixin:SetUpMiniMap()
 
     MiniMapWorldMapButton:Hide()
     MiniMapWorldMapButton:SetScript("OnShow", function()
-        --MiniMapWorldMapButton:Hide()
+        MiniMapWorldMapButton:Hide()
     end)
 
+
+
+
+end
+
+
+function SamsUiConfigPanelMixin:OnChatMessageSystem(...)
+
+    local msg = ...
+
+    --was this a login message
+    local loggedIn = ERR_FRIEND_ONLINE_SS:gsub("%%s", ".+"):gsub('%[','%%%1')
+    if msg:find(loggedIn:sub(6)) then
+        local name = strsplit(" ", msg)
+        local s, e = name:find("%["), name:find("%]")
+        local characterName = name:sub(s+1, e-1)
+
+        if Database:GetConfigValue("welcomeGuildMembersOnLogin") == true then
+            
+            if type(Database:GetConfigValue("welcomeGuildMembersOnLoginMessageArray")) == "string" then
+                local array = Database:GetConfigValue("welcomeGuildMembersOnLoginMessageArray")
+                --print(array)
+                local welcomeOptions = {strsplit(",", array)}
+
+                -- DevTools_Dump({welcomeOptions})
+                -- print(#welcomeOptions)
+
+                local random = math.random(1, #welcomeOptions)
+
+                --print(welcomeOptions[random])
+
+            end
+        end
+
+    end
 end
 
 
 function SamsUiConfigPanelMixin:OnEvent(event, ...)
 
+    if event == "CHAT_MSG_SYSTEM" then
+        self:OnChatMessageSystem(...)
+    end
+
 end
 
 
@@ -483,10 +583,22 @@ end
 
 
 
+
+
+
+
+--[[
+    top bar mixin
+
+    the main ui feature of the addon
+
+    provides menus and info about the players character
+]]
 SamsUiTopBarMixin:GenerateCallbackEvents({
 
 });
 SamsUiTopBarMixin.minimapButtonsMoved = false;
+SamsUiTopBarMixin.dropdownMenuCloseDelay = 3.5;
 SamsUiTopBarMixin.inventorySlots = {
     "HEADSLOT",
     "NECKSLOT",
@@ -513,7 +625,7 @@ SamsUiTopBarMixin.inventorySlots = {
 
 function SamsUiTopBarMixin:OnLoad()
 
-    self.mainMenu.keys = {
+    self.mainMenuContainer.keys = {
         "Options",
         "Reload UI",
         --"Character",
@@ -521,7 +633,7 @@ function SamsUiTopBarMixin:OnLoad()
         "Exit",
     }
 
-    self.mainMenu.menu = {
+    self.mainMenuContainer.menu = {
         ["Options"] = {
             atlas = "services-icon-processing",
             func = function()
@@ -550,6 +662,8 @@ function SamsUiTopBarMixin:OnLoad()
         },
     }
 
+    self.minimapZoneText:SetText(GetMinimapZoneText())
+
     self.addonsInstalled = {}
     for i = 1, GetNumAddOns() do
         local name, title, notes, loadable, reason, security, newVersion = GetAddOnInfo(i)
@@ -561,28 +675,30 @@ function SamsUiTopBarMixin:OnLoad()
         })
     end
 
-    self.mainMenu.buttons = {}
+    self.mainMenuContainer.buttons = {}
 
-    self.openMainMenuButton:SetScript("OnClick", function()
-        self.mainMenu:SetShown(not self.mainMenu:IsVisible())
-    end)
-
-
-    self.mainMenu:SetScript("OnShow", function()
+    self.openMainMenuButton:SetScript("OnEnter", function()
+        self:CloseDropdownMenus()
         self:OpenMainMenu()
     end)
 
-    self.openMinimapButtonsButton:SetScript("OnClick", function()
+    self.openMinimapButtonsButton:SetScript("OnEnter", function()
+
+        if self.minimapButtonsContainer:IsVisible() then
+            return;
+        end
+
+        self:CloseDropdownMenus()
         self:OpenMinimapButtonsMenu()
     end)
 
     self.minimapButtonsContainer:SetScript("OnHide", function()
         self.minimapButtonsContainer:SetAlpha(0)
-        self.minimapButtonsContainer:SetPoint("TOPRIGHT", self.openMinimapButtonsButton, "TOPRIGHT", 5, -9)
+        self.minimapButtonsContainer:SetPoint("TOP", self.openMinimapButtonsButton, "BOTTOM", 0, 35)
     end)
 
     self.minimapButtonsContainer.anim.translate:SetScript("OnFinished", function()
-        self.minimapButtonsContainer:SetPoint("TOPRIGHT", self.openMinimapButtonsButton, "TOPRIGHT", 5, -54)
+        self.minimapButtonsContainer:SetPoint("TOP", self.openMinimapButtonsButton, "BOTTOM", 0, -15)
     end)
 
 
@@ -590,6 +706,8 @@ function SamsUiTopBarMixin:OnLoad()
     self.openCurrencyButton:SetScript("OnEnter", function()        
         GameTooltip:SetOwner(self.openCurrencyButton, 'ANCHOR_BOTTOM')
         GameTooltip:AddLine("Gold")
+        GameTooltip:AddLine(" ")
+
         local profit = GetMoney() - (Database:GetCharacterInfo(self.nameRealm, "initialLoginGold") or 0)
         if profit > 0 then
             GameTooltip:AddLine(string.format("|cff00cc00Profit|r %s", GetCoinTextureString(profit), 1,1,1))
@@ -635,6 +753,7 @@ function SamsUiTopBarMixin:OnLoad()
         self:UpdateDurability()
 
         GameTooltip:AddLine("Durability")
+        GameTooltip:AddLine(" ")
 
         for k, item in ipairs(self.durabilityInfo) do
             
@@ -658,10 +777,16 @@ function SamsUiTopBarMixin:OnLoad()
     end)
 
 
-    self.openFoodAndDrinkButton:SetScript("OnClick", function()
+    self.openFoodAndDrinkButton:SetScript("OnEnter", function()
+        self:CloseDropdownMenus()
         self:OpenFoodAndDrinkMenu()
     end)
 
+
+    self.openConsumablesButton:SetScript("OnEnter", function()
+        self:CloseDropdownMenus()
+        self:OpenConsumablesMenu()
+    end)
 
 
 
@@ -670,6 +795,8 @@ function SamsUiTopBarMixin:OnLoad()
     self:RegisterEvent("PLAYER_MONEY")
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
     self:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
+    self:RegisterEvent("SKILL_LINES_CHANGED")
+    self:RegisterEvent("ZONE_CHANGED")
 
 
 end
@@ -683,6 +810,17 @@ function SamsUiTopBarMixin:OnEvent(event, ...)
             self:MoveAllLibMinimapIcons()
         end)
 
+
+        if ... == "Blizzard_TimeManager" then
+            
+            --TimeManagerClockButton:SetSize(80, 40)
+
+        end
+
+    end
+
+    if event == "ZONE_CHANGED" then
+        self.minimapZoneText:SetText(GetMinimapZoneText())
     end
 
     if event == "PLAYER_ENTERING_WORLD" then
@@ -707,21 +845,107 @@ function SamsUiTopBarMixin:OnEvent(event, ...)
         self:UpdateDurability()
     end
 
+    if event == "SKILL_LINES_CHANGED" then
+        self:ScanSpellbook()
+    end
+
 end
 
+
+function SamsUiTopBarMixin:CloseDropdownMenus()
+    
+    for k, menu in ipairs(self.dropdownMenus) do
+        menu:Hide()
+    end
+end
 
 
 function SamsUiTopBarMixin:OnDatabaseInitialised()
 
     self:UpdateCurrency()
 
+    self:UpdateDurability()
+
+    self:ScanSpellbook()
+
     local _, class = UnitClass("player")
     Database:InsertOrUpdateCharacterInfo(self.nameRealm, "class", class)
 
-    self:UpdateDurability()
+    local level = UnitLevel("player")
+    Database:InsertOrUpdateCharacterInfo(self.nameRealm, "level", level)
+
+
+
+
 
 end
 
+
+function SamsUiTopBarMixin:OpenConsumablesMenu()
+
+    if self.consumablesMenuContainer:IsVisible() then
+        return;
+    end
+
+    if self.consumablesMenuTicker then
+        self.consumablesMenuTicker:Cancel()
+    end
+
+    self:ScanPlayerBags()
+
+    if not self.consumablesMenuButtons then
+        self.consumablesMenuButtons = {}
+    end
+
+    for k, item in ipairs(self.consumables) do
+        
+        if not self.consumablesMenuButtons[k] then
+            
+            local button = CreateFrame("BUTTON", nil, self.consumablesMenuContainer, "SamsUiTopBarInsecureMacroMenuButton")
+
+            button:SetPoint("TOP", 0, (k-1) * -31)
+            button:SetSize(250, 32)
+
+            button.itemLink = item.link;
+            button:SetItem(item)
+
+            button.anim.fadeIn:SetStartDelay(k/40)
+
+            button:Show()
+
+            self.consumablesMenuButtons[k] = button;
+
+        else
+
+            local button = self.consumablesMenuButtons[k]
+
+            button.itemLink = item.link;
+            button:SetItem(item)
+
+            button:Show()
+
+        end
+
+        self.consumablesMenuContainer:SetSize(250, 31*k)
+        self.consumablesMenuContainer:Show()
+    end
+
+    self.consumablesMenuTicker = C_Timer.NewTicker(self.dropdownMenuCloseDelay, function()
+        if self.consumablesMenuContainer:IsMouseOver() == false and self.openConsumablesButton:IsMouseOver() == false then
+            local isHovered = false;
+            for k, button in ipairs(self.consumablesMenuButtons) do
+                if button:IsMouseOver() == true then
+                    isHovered = true;
+                end
+            end
+            if isHovered == false then
+                self.consumablesMenuContainer:Hide()
+                self.consumablesMenuTicker:Cancel()
+            end
+        end
+    end)
+
+end
 
 
 function SamsUiTopBarMixin:OpenFoodAndDrinkMenu()
@@ -734,7 +958,7 @@ function SamsUiTopBarMixin:OpenFoodAndDrinkMenu()
         self.closeFoodAndDrinkMenuTicker:Cancel()
     end
 
-    self:ScanBagsForFoodAndDrink()
+    self:ScanPlayerBags()
 
     if not self.foodAndDrinkMenuButtons then
         self.foodAndDrinkMenuButtons = {}
@@ -750,17 +974,15 @@ function SamsUiTopBarMixin:OpenFoodAndDrinkMenu()
         
         if not self.foodAndDrinkMenuButtons[k] then
             
-            local button = CreateFrame("BUTTON", nil, self.foodAndDrinkMenuContainer, "SamsUiTopBarFoodAndDrinkMenuButton")
+            local button = CreateFrame("BUTTON", nil, self.foodAndDrinkMenuContainer, "SamsUiTopBarInsecureMacroMenuButton")
 
             button:SetPoint("TOP", 0, (k-1) * -31)
             button:SetSize(250, 32)
 
-            button:SetAttribute("type1", "macro")
-
             button.itemLink = item.link;
             button:SetItem(item)
 
-            button.anim.fadeIn:SetStartDelay(k/25)
+            button.anim.fadeIn:SetStartDelay(k/40)
 
             button:Show()
 
@@ -777,12 +999,12 @@ function SamsUiTopBarMixin:OpenFoodAndDrinkMenu()
 
         end
 
-        self.foodAndDrinkMenuContainer:SetSize(250, 33*k)
+        self.foodAndDrinkMenuContainer:SetSize(250, 31*k)
         self.foodAndDrinkMenuContainer:Show()
     end
 
 
-    self.closeFoodAndDrinkMenuTicker = C_Timer.NewTicker(2.5, function()
+    self.closeFoodAndDrinkMenuTicker = C_Timer.NewTicker(self.dropdownMenuCloseDelay, function()
         if self.foodAndDrinkMenuContainer:IsMouseOver() == false and self.openFoodAndDrinkButton:IsMouseOver() == false then
             local isHovered = false;
             for k, button in ipairs(self.foodAndDrinkMenuButtons) do
@@ -800,11 +1022,14 @@ function SamsUiTopBarMixin:OpenFoodAndDrinkMenu()
 end
 
 
-function SamsUiTopBarMixin:ScanBagsForFoodAndDrink()
+function SamsUiTopBarMixin:ScanPlayerBags()
 
     self.foodAndDrink = {}
+    self.consumables = {}
 
     local foodsAdded = {}
+    local consumablesAdded = {}
+
     for bag = 0, 4 do
         for slot = 1, GetContainerNumSlots(bag) do
             local icon, itemCount, locked, quality, readable, lootable, itemLink, isFiltered, noValue, itemID = GetContainerItemInfo(bag, slot)
@@ -812,6 +1037,8 @@ function SamsUiTopBarMixin:ScanBagsForFoodAndDrink()
             if itemID then
                 local _, itemType, itemSubType, itemEquipLoc, icon, itemClassID, itemSubClassID = GetItemInfoInstant(itemID)
                 local itemName, _, itemQuality, itemLevel = GetItemInfo(itemID)
+
+                --food and drink items
                 if itemClassID == 0 and itemSubClassID == 5 then
                     if not foodsAdded[itemID] then
                         table.insert(self.foodAndDrink, {
@@ -830,18 +1057,96 @@ function SamsUiTopBarMixin:ScanBagsForFoodAndDrink()
                         end
                     end
                 end
+
+                --consumables (potions/elixir/flask etc)
+                if itemClassID == 0 and (itemSubClassID == 1 or itemSubClassID == 2 or itemSubClassID == 3) then
+                    if not consumablesAdded[itemID] then
+                        table.insert(self.consumables, {
+                            icon = icon,
+                            link = itemLink,
+                            count = itemCount,
+                            name = itemName,
+                            ilvl = itemLevel or -1,
+                        })
+                        consumablesAdded[itemID] = true;
+
+                    else
+                        for _, consumable in ipairs(self.consumables) do
+                            if consumable.name == itemName then
+                                consumable.count = consumable.count + itemCount;
+                            end
+                        end
+                    end
+                end
+
+
+
             end
         end
     end
+    
     if self.foodAndDrink and #self.foodAndDrink > 0 then
         table.sort(self.foodAndDrink, function(a,b)
             if a.ilvl == b.ilvl then
-                return a.count > b.count
+                return a.name > b.name
             else
                 return a.ilvl > b.ilvl
             end
         end)
     end
+
+    if self.consumables and #self.consumables > 0 then
+        table.sort(self.consumables, function(a,b)
+            if a.ilvl == b.ilvl then
+                return a.name > b.name
+            else
+                return a.ilvl > b.ilvl
+            end
+        end)
+    end
+
+end
+
+
+function SamsUiTopBarMixin:ScanSpellbook()
+
+     if not self.nameRealm then
+         return;
+     end
+
+    local prof1, prof2 = false, false;
+    local _, _, offset, numSlots = GetSpellTabInfo(1)
+    for j = offset+1, offset+numSlots do
+        
+        local _, spellID = GetSpellBookItemInfo(j, BOOKTYPE_SPELL)
+        local spellName = GetSpellInfo(spellID)
+
+        ---herbalism is listed as "Find herbs" with a spell ID of 2383 so just override this
+        if spellID == 2383 then
+            spellName = "Herbalism";
+
+        ---mining is listed as "Find minerals" so override this too
+        elseif spellID == 2580 then
+            spellName = "Mining";
+        end
+
+        --need to get the skinning id
+
+        if tradeskillNamesToIDs[spellName] then
+
+            if prof1 == false then
+                prof1 = true
+                Database:InsertOrUpdateCharacterInfo(self.nameRealm, "profession1", spellName)
+
+            else
+                if prof2 == false then
+                    Database:InsertOrUpdateCharacterInfo(self.nameRealm, "profession2", spellName)
+                end
+            end
+
+        end
+    end
+
 end
 
 
@@ -855,10 +1160,15 @@ function SamsUiTopBarMixin:UpdateDurability()
         local itemLink = GetInventoryItemLink("player", slotId)
         if itemLink then
             local current, maximum = GetInventoryItemDurability(i)
+            local percent = 100;
+            if type(current) == "number" and type(maximum) == "number" then
+                percent = tonumber(string.format("%.1f", (current / maximum) * 100));
+            end
             self.durabilityInfo[i] = {
                 itemLink = itemLink,
                 currentDurability = current or 1,
                 maximumDurability = maximum or 1,
+                percentDurability = percent or 1,
             }
             currentDurability = currentDurability + (current or 0);
             maximumDurability = maximumDurability + (maximum or 0);
@@ -867,13 +1177,18 @@ function SamsUiTopBarMixin:UpdateDurability()
                 itemLink = "-",
                 currentDurability = 1,
                 maximumDurability = 1,
+                percentDurability = 1,
             }
         end
     end
 
+    table.sort(self.durabilityInfo, function(a,b)
+        return a.percentDurability > b.percentDurability;
+    end)
+
     local durability = tonumber(string.format("%.1f", (currentDurability / maximumDurability) * 100));
 
-    self.openDurabilityButton:SetText(string.format("%s %s %%", CreateAtlasMarkup("vehicle-hammergold", 18, 18), durability))
+    self.openDurabilityButton:SetText(string.format("%s %s %%", CreateAtlasMarkup("vehicle-hammergold-3", 18, 18), durability))
 
 end
 
@@ -907,7 +1222,7 @@ function SamsUiTopBarMixin:OpenMinimapButtonsMenu()
     self.minimapButtonsContainer:Show()
     self.minimapButtonsContainer.anim:Play()
 
-    self.minimapButtonsCloseDelayTicker = C_Timer.NewTicker(2.5, function()
+    self.minimapButtonsCloseDelayTicker = C_Timer.NewTicker(self.dropdownMenuCloseDelay, function()
         if self.openMinimapButtonsButton:IsMouseOver() == false and self.minimapButtonsContainer:IsMouseOver() == false then
             local isHovered = false;
             for k, button in ipairs(self.minimapButtons) do
@@ -1018,46 +1333,48 @@ end
 
 function SamsUiTopBarMixin:OpenMainMenu()
 
-    if self.mainMenuCloseDelayTicker then
-        self.mainMenuCloseDelayTicker:Cancel()
+    if self.mainMenuContainerCloseDelayTicker then
+        self.mainMenuContainerCloseDelayTicker:Cancel()
     end
 
-    for k, item in ipairs(self.mainMenu.keys) do
+    for k, item in ipairs(self.mainMenuContainer.keys) do
 
-        if not self.mainMenu.buttons[k] then
-            local button = CreateFrame("BUTTON", nil, self.mainMenu, "SamsUiTopBarMainMenuButton")
+        if not self.mainMenuContainer.buttons[k] then
+            local button = CreateFrame("BUTTON", nil, self.mainMenuContainer, "SamsUiTopBarMainMenuButton")
             button:SetPoint("TOP", 0, (k-1)*-41)
             button:SetSize(200, 40)
             button:SetText(item)
 
-            if self.mainMenu.menu[item].macro then
+            if self.mainMenuContainer.menu[item].macro then
                 button:SetAttribute("type1", "macro")
-                button:SetAttribute("macrotext1", string.format([[%s]], self.mainMenu.menu[item].macro))
+                button:SetAttribute("macrotext1", string.format([[%s]], self.mainMenuContainer.menu[item].macro))
                 button.func = nil;
             else
-                button.func = self.mainMenu.menu[item].func;
+                button.func = self.mainMenuContainer.menu[item].func;
 
             end
 
-            button:SetIconAtlas(self.mainMenu.menu[item].atlas)
+            button:SetIconAtlas(self.mainMenuContainer.menu[item].atlas)
             
             button.anim.fadeIn:SetStartDelay(k/25)
 
-            self.mainMenu.buttons[k] = button;
+            self.mainMenuContainer.buttons[k] = button;
 
-            self.mainMenu:SetSize(200, k*28)
+            self.mainMenuContainer:SetSize(200, k*28)
 
         end
     end
 
-    for _, button in ipairs(self.mainMenu.buttons) do
+    for _, button in ipairs(self.mainMenuContainer.buttons) do
         button:Show()
     end
 
-    self.mainMenuCloseDelayTicker = C_Timer.NewTicker(2.5, function()
-        if self.mainMenu:IsMouseOver() == false and self.openMainMenuButton:IsMouseOver() == false then
-            self.mainMenu:Hide()
-            self.mainMenuCloseDelayTicker:Cancel()
+    self.mainMenuContainer:Show()
+
+    self.mainMenuContainerCloseDelayTicker = C_Timer.NewTicker(self.dropdownMenuCloseDelay, function()
+        if self.mainMenuContainer:IsMouseOver() == false and self.openMainMenuButton:IsMouseOver() == false then
+            self.mainMenuContainer:Hide()
+            self.mainMenuContainerCloseDelayTicker:Cancel()
         end
     end)
 end
@@ -1067,6 +1384,21 @@ end
 
 
 
+
+
+
+
+
+
+
+
+
+
+--[[
+    player bar mixin
+
+    handles the player bar ui
+]]
 SamsUiPlayerBarMixin:GenerateCallbackEvents({
 
 });
@@ -1160,9 +1492,6 @@ function SamsUiPlayerBarMixin:OnEvent(event, ...)
 end
 
 
-
-
-
 function SamsUiPlayerBarMixin:OnUpdate()
 
     local health, maxHealth = UnitHealth("player"), UnitHealthMax("player")
@@ -1212,6 +1541,11 @@ end
 
 
 
+--[[
+    target bar mixin
+
+    hanldes the target bar
+]]
 SamsUiTargetBarMixin:GenerateCallbackEvents({
 
 });
@@ -1298,6 +1632,15 @@ function SamsUiTargetBarMixin:SetTarget()
     local r, g, b, argbHex = GetClassColor(targetClass)
     self.portraitRing:SetVertexColor(r, g, b)
 
+    local targetClassification = UnitClassification("target")
+
+    if targetClassification == "elite" then
+        self.classificationIcon:Show()
+
+    else
+        self.classificationIcon:Hide()
+    end
+
     SetPortraitTexture(self.portrait, "target")
 
     self.targetPowerType, self.targetPowerToken = UnitPowerType("target")
@@ -1331,6 +1674,7 @@ function SamsUiTargetBarMixin:ClearTarget()
     self.name:SetText("")
     self.level:SetText("")
     self.factionIcon:SetAtlas("honorsystem-portrait-neutral")
+    self.classificationIcon:Hide()
 
 end
 

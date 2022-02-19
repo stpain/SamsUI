@@ -2,6 +2,12 @@
 
 local name, addon = ...
 
+
+
+
+--[[
+    the buttons used in the main menu from the top bar
+]]
 SamsUiTopBarMainMenuButtonMixin = {}
 
 function SamsUiTopBarMainMenuButtonMixin:SetText(text)
@@ -37,9 +43,13 @@ end
 
 
 
-SamsUiTopBarFoodAndDrinkMenuButtonMixin = {}
 
-function SamsUiTopBarFoodAndDrinkMenuButtonMixin:SetItem(item)
+--[[
+    an insecure button template used for dropdown menus where the player can use an item listed
+]]
+SamsUiTopBarInsecureMacroMenuButtonMixin = {}
+
+function SamsUiTopBarInsecureMacroMenuButtonMixin:SetItem(item)
     self.link:SetText(item.link)
     self.count:SetText(item.count)
     self.icon:SetTexture(item.icon)
@@ -48,15 +58,15 @@ function SamsUiTopBarFoodAndDrinkMenuButtonMixin:SetItem(item)
 end
 
 
-function SamsUiTopBarFoodAndDrinkMenuButtonMixin:OnShow()
+function SamsUiTopBarInsecureMacroMenuButtonMixin:OnShow()
     self.anim:Play()
 end
 
-function SamsUiTopBarFoodAndDrinkMenuButtonMixin:OnHide()
+function SamsUiTopBarInsecureMacroMenuButtonMixin:OnHide()
     self:SetAlpha(0)
 end
 
-function SamsUiTopBarFoodAndDrinkMenuButtonMixin:OnEnter()
+function SamsUiTopBarInsecureMacroMenuButtonMixin:OnEnter()
     
     if self.itemLink then
         GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
@@ -65,15 +75,15 @@ function SamsUiTopBarFoodAndDrinkMenuButtonMixin:OnEnter()
     end
 end
 
-function SamsUiTopBarFoodAndDrinkMenuButtonMixin:OnLeave()
+function SamsUiTopBarInsecureMacroMenuButtonMixin:OnLeave()
     GameTooltip_SetDefaultAnchor(GameTooltip, UIParent)
 end
 
-function SamsUiTopBarFoodAndDrinkMenuButtonMixin:OnLoad()
+function SamsUiTopBarInsecureMacroMenuButtonMixin:OnLoad()
     --self:SetAlpha(0)
 end
 
-function SamsUiTopBarFoodAndDrinkMenuButtonMixin:OnMouseDown()
+function SamsUiTopBarInsecureMacroMenuButtonMixin:OnMouseDown()
     if self.func then
         self.func()
     end
@@ -84,6 +94,11 @@ end
 
 
 
+
+
+--[[
+    button used for the top bar for dropdown menus ???
+]]
 SamsUiTopBarDropdownMenuButtonMixin = {}
 
 function SamsUiTopBarDropdownMenuButtonMixin:OnLoad()
@@ -102,6 +117,12 @@ end
 
 
 
+
+
+
+--[[
+    mixin for an inset style button used to show info
+]]
 SamsUiTopBarInsetButtonMixin = {}
 
 function SamsUiTopBarInsetButtonMixin:OnLoad()
@@ -120,6 +141,12 @@ end
 
 
 
+
+
+
+--[[
+    the menu buttons for the config panel menu
+]]
 SamsUiConfigPanelMenuButtonMixin = {}
 function SamsUiConfigPanelMenuButtonMixin:OnLoad()
 
@@ -143,7 +170,6 @@ function SamsUiConfigPanelMenuButtonMixin:SetDataBinding(binding, height)
     end
 
     self.func = binding.func;
-    --self:SetScript("OnClick", binding.func)
 end
 
 
@@ -253,6 +279,10 @@ end
 
 
 
+
+--[[
+    the database view row template used in the config panel 
+]]
 SamsUiConfigPanelDatabaseControlListviewItemTemplateMixin = {}
 function SamsUiConfigPanelDatabaseControlListviewItemTemplateMixin:OnLoad()
 
@@ -268,6 +298,24 @@ function SamsUiConfigPanelDatabaseControlListviewItemTemplateMixin:SetDataBindin
             self[k]:SetText(v)
         end
     end
+
+    local tradeskillInfo = "";
+    if binding.profession1 then
+        if binding.profession1 == "Engineering" then
+            tradeskillInfo = CreateAtlasMarkup("Mobile-Enginnering", 20, 20)
+        else
+            tradeskillInfo = CreateAtlasMarkup(string.format("Mobile-%s", binding.profession1), 20, 20)
+        end
+    end
+    tradeskillInfo = tradeskillInfo.." "
+    if binding.profession2 then
+        if binding.profession2 == "Engineering" then
+            tradeskillInfo = tradeskillInfo..CreateAtlasMarkup("Mobile-Enginnering", 20, 20)
+        else
+            tradeskillInfo = tradeskillInfo..CreateAtlasMarkup(string.format("Mobile-%s", binding.profession2), 20, 20)
+        end
+    end
+    self.tradeskills:SetText(tradeskillInfo)
 
     self.delete:SetScript("OnClick", function()
         binding.deleteFunc(nil, binding.name)

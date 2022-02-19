@@ -49,7 +49,14 @@
     </Button>
 
 
-    <Button name="SamsUiTopBarFoodAndDrinkMenuButton" mixin="SamsUiTopBarFoodAndDrinkMenuButtonMixin" inherits="InsecureActionButtonTemplate" registerForClicks="LeftButtonUp,RightButtonUp" virtual="true">
+    <Button name="SamsUiInsecureMacroButton" virtual="true" inherits="InsecureActionButtonTemplate" registerForClicks="LeftButtonUp,RightButtonUp">
+        <Attributes>
+            <Attribute name="type1" value="macro"/>
+        </Attributes>
+    </Button>
+
+
+    <Button name="SamsUiTopBarInsecureMacroMenuButton" mixin="SamsUiTopBarInsecureMacroMenuButtonMixin" inherits="SamsUiInsecureMacroButton" virtual="true">
 
         <NormalTexture atlas="groupfinder-button-cover"/>
         <PushedTexture atlas="groupfinder-button-cover-down"/>
@@ -97,7 +104,7 @@
     </Button>
 
 
-    <Button name="SamsUiTopBarMainMenuButton" mixin="SamsUiTopBarMainMenuButtonMixin" inherits="InsecureActionButtonTemplate" registerForClicks="LeftButtonUp,RightButtonUp" virtual="true">
+    <Button name="SamsUiTopBarMainMenuButton" mixin="SamsUiTopBarMainMenuButtonMixin" inherits="SamsUiInsecureMacroButton" virtual="true">
         
         <!-- <NormalTexture file="Interface/PetBattles/PetBattleHUDAtlas">
             <TexCoords left="0" right="0.38328" top="0.5209" bottom="0.6089"/>
@@ -127,7 +134,7 @@
                 <Texture parentKey="icon">
                     <Size x="28" y="28"/>
                     <Anchors>
-                        <Anchor point="LEFT" x="0" y="0"/>
+                        <Anchor point="LEFT" x="5" y="0"/>
                     </Anchors>
                 </Texture>
             </Layer>
@@ -182,24 +189,38 @@
             </Layer>
             <Layer level="OVERLAY">
                 <FontString parentKey="name" inherits="GameFontNormal" justifyH="LEFT">
-                    <Size x="220"/>
+                    <Size x="210"/>
                     <Color r="1" g="1" b="1"/>
                     <Anchors>
                         <Anchor point="LEFT" x="0" y="0"/>
                     </Anchors>
                 </FontString>
                 <FontString parentKey="class" inherits="GameFontNormal" justifyH="LEFT">
-                    <Size x="100"/>
+                    <Size x="90"/>
                     <Color r="1" g="1" b="1"/>
                     <Anchors>
                         <Anchor point="LEFT" relativeKey="$parent.name" relativePoint="RIGHT" x="2" y="0"/>
                     </Anchors>
                 </FontString>
                 <FontString parentKey="level" inherits="GameFontNormal" justifyH="LEFT">
-                    <Size x="60"/>
+                    <Size x="50"/>
                     <Color r="1" g="1" b="1"/>
                     <Anchors>
                         <Anchor point="LEFT" relativeKey="$parent.class" relativePoint="RIGHT" x="2" y="0"/>
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="xp" inherits="GameFontNormal" justifyH="LEFT">
+                    <Size x="60"/>
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="LEFT" relativeKey="$parent.level" relativePoint="RIGHT" x="10" y="0"/>
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="tradeskills" inherits="GameFontNormal" justifyH="LEFT">
+                    <Size x="60"/>
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="LEFT" relativeKey="$parent.xp" relativePoint="RIGHT" x="10" y="0"/>
                     </Anchors>
                 </FontString>
             </Layer>

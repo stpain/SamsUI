@@ -30,12 +30,22 @@
                         <Anchor point="LEFT" relativePoint="RIGHT" x="-80" y="0"/>
                     </Anchors>
                 </FontString>
+
                 <FontString parentKey="minimapIconsMenuLabel" inherits="GameFontNormal" text="Minimap Icons">
                     <Color r="1" g="1" b="1"/>
                     <Anchors>
                         <Anchor point="LEFT" relativePoint="RIGHT" x="-240" y="0"/>
                     </Anchors>
                 </FontString>
+
+                <FontString parentKey="minimapZoneText" inherits="GameFontNormalLarge" text="-" justifyH="CENTER">
+                    <Size x="240" y="28"/>
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="RIGHT" relativePoint="CENTER" x="-80" y="0"/>
+                    </Anchors>
+                </FontString>
+
             </Layer>
         </Layers>
 
@@ -49,7 +59,7 @@
                 </Anchors>
             </Button>
 
-            <Frame parentKey="mainMenu" hidden="true">
+            <Frame parentKey="mainMenuContainer" parentArray="dropdownMenus" hidden="true">
                 <Anchors>
                     <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" x="-10" y="-45"/>
                 </Anchors>
@@ -65,18 +75,20 @@
                 <Anchors>
                     <Anchor point="RIGHT" x="-110" y="0"/>
                 </Anchors>
+                <NormalTexture atlas="services-icon-warning"/>
             </Button>
 
-            <Frame parentKey="minimapButtonsContainer" frameStrata="LOW" frameLevel="2" alpha="0" hidden="true">
+
+            <Frame parentKey="minimapButtonsContainer" parentArray="dropdownMenus" frameStrata="LOW" frameLevel="2" alpha="0" hidden="true">
                 <Animations>
                     <AnimationGroup parentKey="anim" setToFinalAlpha="true">
                         <Alpha parentKey="fadeIn" duration="0.33" fromAlpha="0" toAlpha="1" smoothing="OUT"/>
-                        <Translation parentKey="translate" duration="0.33" offsetX="0" offsetY="-45" smoothing="OUT"/>
+                        <Translation parentKey="translate" duration="0.33" offsetX="0" offsetY="-50" smoothing="OUT"/>
                     </AnimationGroup>
                 </Animations>
                 <Size x="0" y="0"/>
                 <Anchors>
-                    <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeKey="$parent.openMinimapButtonsButton" x="5" y="-9"/>
+                    <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.openMinimapButtonsButton" x="0" y="35"/>
                 </Anchors>
                 <Layers>
                     <Layer level="BACKGROUND">
@@ -119,10 +131,37 @@
                 <HighlightTexture atlas="chatframe-button-highlightalert"/>
             </Button>
 
-            <Frame parentKey="foodAndDrinkMenuContainer" hidden="true">
+            <Frame parentKey="foodAndDrinkMenuContainer" parentArray="dropdownMenus" hidden="true">
                 <Anchors>
                     <Anchor point="TOP" relativeKey="$parent.openFoodAndDrinkButton" relativePoint="BOTTOM" x="0" y="-10"/>
                 </Anchors>
+                <Layers>
+                    <Layer>
+                        <Texture atlas="tradeskill-background-recipe" setAllPoints="true"/>
+                    </Layer>
+                </Layers>
+            </Frame>
+
+
+            <Button parentKey="openConsumablesButton" registerForClicks="LeftButtonUp">
+                <Size x="28" y="28"/>
+                <Anchors>
+                    <Anchor point="RIGHT" x="-380" y="0"/>
+                </Anchors>
+                <NormalTexture atlas="bags-icon-consumables"/>
+                <PushedTexture atlas="bags-icon-consumables"/>
+                <HighlightTexture atlas="chatframe-button-highlightalert"/>
+            </Button>
+
+            <Frame parentKey="consumablesMenuContainer" parentArray="dropdownMenus" hidden="true">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.openConsumablesButton" relativePoint="BOTTOM" x="0" y="-10"/>
+                </Anchors>
+                <Layers>
+                    <Layer>
+                        <Texture atlas="tradeskill-background-recipe" setAllPoints="true"/>
+                    </Layer>
+                </Layers>
             </Frame>
 
         </Frames>
@@ -374,6 +413,36 @@
                 </Layers>
 
             </StatusBar>
+
+            <Frame parentKey="classificationIcon" frameLevel="6" hidden="true">
+                <Size x="28" y="28"/>
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="70" y="12"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <Texture parentKey="eliteIconRing" atlas="Portrait-Frame-Small" setAllPoints="true">
+                            <Size x="28" y="28"/>
+                        </Texture>
+                    </Layer>
+                    <Layer level="BACKGROUND">
+                        <Texture parentKey="eliteIconBackground" atlas="AdventureMapQuest-PortraitBG">
+                            <Size x="20" y="20"/>
+                            <Anchors>
+                                <Anchor point="CENTER" relativePoint="CENTER" relativeKey="$parent.eliteIconRing" x="0" y="2"/>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                    <Layer level="ARTWORK">
+                        <Texture parentKey="eliteIcon" atlas="nameplates-icon-elite-gold">
+                            <Size x="16" y="16"/>
+                            <Anchors>
+                                <Anchor point="CENTER" relativePoint="CENTER" relativeKey="$parent.eliteIconBackground" x="0" y="-1"/>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+            </Frame>
         </Frames>
 
 
@@ -391,7 +460,7 @@
 
 
     <Frame name="SamsUiConfigPanel" mixin="SamsUiConfigPanelMixin" parent="UIParent" inherits="PortraitFrameTemplate" frameStrata="HIGH" enableMouse="true" movable="true" hidden="false">
-        <Size x="600" y="400"/>
+        <Size x="800" y="400"/>
         <Anchors>
             <Anchor point="CENTER" x="0" y="0"/>
         </Anchors>
@@ -421,6 +490,54 @@
                 </Anchors>
 
                 <Frames>
+                
+                    <Frame parentKey="generalConfig" parentArray="frames" setAllPoints="true" hidden="true">
+
+                        <Frames>
+
+                            <!-- player health config -->
+                            <CheckButton parentKey="welcomeGuildMembersOnLoginCheckButton" inherits="ChatConfigCheckButtonTemplate">
+                                <Size x="24" y="24"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="16" y="-80"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Welcome guildies on login">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <!-- <FontHeight val="12"/> -->
+                                            <Anchors>
+                                                <Anchor point="LEFT">
+                                                    <offset x="24" y="0"/>
+                                                </Anchor>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers>  
+                            </CheckButton>
+
+                            <EditBox parentKey="welcomeGuildMembersOnLoginMessageArrayEditBox" inherits="InputBoxTemplate" autoFocus="false">
+                                <Size x="200" y="20"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" relativeKey="$parent.welcomeGuildMembersOnLoginCheckButton" relativePoint="BOTTOMLEFT" x="7" y="-16"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Message options (comma seperated)">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <!-- <FontHeight val="12"/> -->
+                                            <Anchors>
+                                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="0" y="2"/>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers>                 
+                            </EditBox>
+
+
+                        </Frames>
+                    </Frame>
+
                     <Frame parentKey="playerBarConfig" parentArray="frames" setAllPoints="true" hidden="true">
 
                         <Frames>
@@ -609,7 +726,7 @@
 
                             <Frame parentKey="listview" inherits="SamsUiListviewTemplate">
                                 <Anchors>
-                                    <Anchor point="TOPLEFT" x="6" y="-30"/>
+                                    <Anchor point="TOPLEFT" x="4" y="-30"/>
                                     <Anchor point="BOTTOMRIGHT" x="-4" y="4"/>
                                 </Anchors>
 
@@ -624,7 +741,25 @@
                                         <FontString inherits="GameFontNormalLarge" text="Class">
                                             <!-- <Color r="1" g="1" b="1"/> -->
                                             <Anchors>
-                                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="230" y="0"/>
+                                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="220" y="0"/>
+                                            </Anchors>
+                                        </FontString>
+                                        <FontString inherits="GameFontNormalLarge" text="Level">
+                                            <!-- <Color r="1" g="1" b="1"/> -->
+                                            <Anchors>
+                                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="300" y="0"/>
+                                            </Anchors>
+                                        </FontString>
+                                        <FontString inherits="GameFontNormalLarge" text="XP">
+                                            <!-- <Color r="1" g="1" b="1"/> -->
+                                            <Anchors>
+                                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="380" y="0"/>
+                                            </Anchors>
+                                        </FontString>
+                                        <FontString inherits="GameFontNormalLarge" text="Tradeskills">
+                                            <!-- <Color r="1" g="1" b="1"/> -->
+                                            <Anchors>
+                                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="430" y="0"/>
                                             </Anchors>
                                         </FontString>
                                         <FontString inherits="GameFontNormalLarge" text="Delete">
