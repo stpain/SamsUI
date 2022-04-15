@@ -4,6 +4,8 @@
 ## Notes: Sams ui mod addon
 ## SavedVariables: SamsUiConfig, SamsUiCharacters
 
+Util.lua
+
 Templates.lua
 Templates.xml
 

@@ -24,19 +24,6 @@
             </Layer>
 
             <Layer>
-                <FontString parentKey="mainMenuLabel" inherits="GameFontNormal" text="Menu">
-                    <Color r="1" g="1" b="1"/>
-                    <Anchors>
-                        <Anchor point="LEFT" relativePoint="RIGHT" x="-80" y="0"/>
-                    </Anchors>
-                </FontString>
-
-                <FontString parentKey="minimapIconsMenuLabel" inherits="GameFontNormal" text="Minimap Icons">
-                    <Color r="1" g="1" b="1"/>
-                    <Anchors>
-                        <Anchor point="LEFT" relativePoint="RIGHT" x="-240" y="0"/>
-                    </Anchors>
-                </FontString>
 
                 <FontString parentKey="minimapZoneText" inherits="GameFontNormalLarge" text="-" justifyH="CENTER">
                     <Size x="240" y="28"/>
@@ -45,6 +32,14 @@
                         <Anchor point="RIGHT" relativePoint="CENTER" x="-80" y="0"/>
                     </Anchors>
                 </FontString>
+<!-- 
+                <FontString parentKey="frameRateText" inherits="GameFontNormalLarge" text="-" justifyH="CENTER">
+                    <Size x="240" y="28"/>
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="CENTER" x="80" y="0"/>
+                    </Anchors>
+                </FontString> -->
 
             </Layer>
         </Layers>
@@ -52,11 +47,106 @@
 
 <!-- AlliedRace-UnlockingFrame-ZoomIn -->
         <Frames>
-            <Button parentKey="openMainMenuButton" inherits="SamsUiTopBarDropdownMenuButton">
-                <Size x="28" y="28"/>
+
+
+            <Button parentKey="openPlayerBagsButton" inherits="SamsUiTopBarInsetButton">
+                <Size x="90" y="24"/>
                 <Anchors>
-                    <Anchor point="RIGHT" x="-8" y="0"/>
+                    <Anchor point="LEFT" x="10" y="0"/>
                 </Anchors>
+            </Button>
+
+
+            <!-- <Frame name="playerBagsContainer2" hidden="false" inherits="PortraitFrameTemplate">
+                <Size x="500" y="200"/>
+                <Anchors>
+                    <Anchor point="CENTER" x="0" y="-500"/>
+                </Anchors>
+            </Frame> -->
+
+
+            <Frame parentKey="playerBagsContainer" parentArray="dropdownMenus" hidden="true" frameStrata="DIALOGUE">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.openPlayerBagsButton" relativePoint="BOTTOMLEFT" x="0" y="-10"/>
+                </Anchors>
+                <Layers>
+                    <Layer>
+                        <Texture atlas="tradeskill-background-recipe" setAllPoints="true"/>
+                    </Layer>
+                </Layers>
+            </Frame>
+
+            <Frame parentKey="playerBagsSubClassContainer" parentArray="dropdownMenus" hidden="true" frameStrata="DIALOGUE">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.openPlayerBagsButton" relativePoint="BOTTOM" x="0" y="-10"/>
+                </Anchors>
+                <Layers>
+                    <Layer>
+                        <Texture atlas="tradeskill-background-recipe" setAllPoints="true"/>
+                    </Layer>
+                </Layers>
+            </Frame>
+
+            <Frame parentKey="playerBagsSubClassItemsContainer" parentArray="dropdownMenus" hidden="true" frameStrata="DIALOGUE">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.openPlayerBagsButton" relativePoint="BOTTOM" x="0" y="-10"/>
+                </Anchors>
+                <Layers>
+                    <Layer>
+                        <Texture atlas="tradeskill-background-recipe" setAllPoints="true"/>
+                    </Layer>
+                </Layers>
+            </Frame>
+
+
+            <Button parentKey="openCurrencyButton" inherits="SamsUiTopBarInsetButton">
+                <Size x="140" y="24"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.openPlayerBagsButton" relativePoint="RIGHT" x="10" y="0"/>
+                </Anchors>
+            </Button>
+
+
+            <Button parentKey="openDurabilityButton" inherits="SamsUiTopBarInsetButton">
+                <Size x="90" y="24"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.openCurrencyButton" relativePoint="RIGHT" x="10" y="0"/>
+                </Anchors>
+            </Button>
+
+
+            <Button parentKey="openXpButton" inherits="SamsUiTopBarInsetButton">
+                <Size x="90" y="24"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.openDurabilityButton" relativePoint="RIGHT" x="10" y="0"/>
+                </Anchors>
+            </Button>
+
+
+            <Button parentKey="openSessionButton" inherits="SamsUiTopBarInsetButton">
+                <Size x="95" y="24"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.openXpButton" relativePoint="RIGHT" x="10" y="0"/>
+                </Anchors>
+            </Button>
+
+
+            <Button parentKey="openNetStatsButton" inherits="SamsUiTopBarInsetButton">
+                <Size x="95" y="24"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.openSessionButton" relativePoint="RIGHT" x="10" y="0"/>
+                </Anchors>
+            </Button>
+
+
+
+            <Button parentKey="openMainMenuButton" parentArray="goldRingButtons" inherits="SamsUiTopBarGoldRingButton">
+                <Anchors>
+                    <Anchor point="RIGHT" x="-8" y="-1"/>
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="tooltipText" value="Main menu" type="string"/>
+                </KeyValues>
             </Button>
 
             <Frame parentKey="mainMenuContainer" parentArray="dropdownMenus" hidden="true">
@@ -70,12 +160,13 @@
                 </Layers>
             </Frame>
 
-            <Button parentKey="openMinimapButtonsButton" inherits="SamsUiTopBarDropdownMenuButton">
-                <Size x="28" y="28"/>
+            <Button parentKey="openMinimapButtonsButton" parentArray="goldRingButtons" inherits="SamsUiTopBarGoldRingButton">
                 <Anchors>
-                    <Anchor point="RIGHT" x="-110" y="0"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.openMainMenuButton" relativePoint="LEFT" x="-10" y="0"/>
                 </Anchors>
-                <NormalTexture atlas="services-icon-warning"/>
+                <KeyValues>
+                    <KeyValue key="tooltipText" value="Addons" type="string"/>
+                </KeyValues>
             </Button>
 
 
@@ -98,38 +189,14 @@
             </Frame>
 
 
-
-
-            <Button parentKey="openCurrencyButton" inherits="SamsUiTopBarInsetButton">
-                <Size x="140" y="24"/>
+            <!-- <Button parentKey="openFoodAndDrinkButton" inherits="SamsUiTopBarGoldRingButton">
                 <Anchors>
-                    <Anchor point="LEFT" x="10" y="0"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.openMinimapButtonsButton" relativePoint="LEFT" x="-10" y="0"/>
                 </Anchors>
-            </Button>
-
-
-            <Button parentKey="openDurabilityButton" inherits="SamsUiTopBarInsetButton">
-                <Size x="90" y="24"/>
-                <Anchors>
-                    <Anchor point="LEFT" relativeKey="$parent.openCurrencyButton" relativePoint="RIGHT" x="10" y="0"/>
-                </Anchors>
-            </Button>
-
-
-            <Frame parentKey="durabilityFrame" >
-
-            </Frame>
-
-
-            <Button parentKey="openFoodAndDrinkButton" registerForClicks="LeftButtonUp">
-                <Size x="28" y="28"/>
-                <Anchors>
-                    <Anchor point="RIGHT" x="-300" y="0"/>
-                </Anchors>
-                <NormalTexture atlas="food"/>
-                <PushedTexture atlas="food"/>
-                <HighlightTexture atlas="chatframe-button-highlightalert"/>
-            </Button>
+                <KeyValues>
+                    <KeyValue key="tooltipText" value="Food and drink" type="string"/>
+                </KeyValues>
+            </Button> -->
 
             <Frame parentKey="foodAndDrinkMenuContainer" parentArray="dropdownMenus" hidden="true">
                 <Anchors>
@@ -143,15 +210,14 @@
             </Frame>
 
 
-            <Button parentKey="openConsumablesButton" registerForClicks="LeftButtonUp">
-                <Size x="28" y="28"/>
+            <!-- <Button parentKey="openConsumablesButton" inherits="SamsUiTopBarGoldRingButton">
                 <Anchors>
-                    <Anchor point="RIGHT" x="-380" y="0"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.openFoodAndDrinkButton" relativePoint="LEFT" x="-10" y="0"/>
                 </Anchors>
-                <NormalTexture atlas="bags-icon-consumables"/>
-                <PushedTexture atlas="bags-icon-consumables"/>
-                <HighlightTexture atlas="chatframe-button-highlightalert"/>
-            </Button>
+                <KeyValues>
+                    <KeyValue key="tooltipText" value="Consumables" type="string"/>
+                </KeyValues>
+            </Button> -->
 
             <Frame parentKey="consumablesMenuContainer" parentArray="dropdownMenus" hidden="true">
                 <Anchors>
@@ -164,16 +230,119 @@
                 </Layers>
             </Frame>
 
+            <Button parentKey="openQuestLogButton" parentArray="goldRingButtons" inherits="SamsUiTopBarGoldRingButton">
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent.openMinimapButtonsButton" relativePoint="LEFT" x="-10" y="0"/>
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="tooltipText" value="Quest log" type="string"/>
+                </KeyValues>
+            </Button>
+
+            <Button parentKey="openCharacterFrameButton" parentArray="goldRingButtons" inherits="SamsUiTopBarGoldRingButton">
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent.openQuestLogButton" relativePoint="LEFT" x="-10" y="0"/>
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="tooltipText" value="Character" type="string"/>
+                </KeyValues>
+            </Button>
+
+            <Button parentKey="openLFGFrameButton" parentArray="goldRingButtons" inherits="SamsUiTopBarGoldRingButton">
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent.openCharacterFrameButton" relativePoint="LEFT" x="-10" y="0"/>
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="tooltipText" value="LFG" type="string"/>
+                </KeyValues>
+            </Button>
+
+            <Button parentKey="openMacroFrameButton" parentArray="goldRingButtons" inherits="SamsUiTopBarGoldRingButton">
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent.openLFGFrameButton" relativePoint="LEFT" x="-10" y="0"/>
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="tooltipText" value="Macro UI" type="string"/>
+                </KeyValues>
+            </Button>
+
+            <Button parentKey="openSpellBookFrameButton" parentArray="goldRingButtons" inherits="SamsUiTopBarGoldRingButton">
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent.openMacroFrameButton" relativePoint="LEFT" x="-10" y="0"/>
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="tooltipText" value="Spell book" type="string"/>
+                </KeyValues>
+            </Button>
+
+            <Button parentKey="hearthstoneButton" parentArray="goldRingButtons" inherits="SamsUiTopBarGoldRingButton">
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent.openSpellBookFrameButton" relativePoint="LEFT" x="-10" y="0"/>
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="tooltipText" value="Hearthstone" type="string"/>
+                </KeyValues>
+            </Button>
+
+            <Button parentKey="openCookingButton" parentArray="goldRingButtons" inherits="SamsUiTopBarGoldRingButton">
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent.hearthstoneButton" relativePoint="LEFT" x="-10" y="0"/>
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="tooltipText" value="-" type="string"/>
+                </KeyValues>
+            </Button>
+
+            <Button parentKey="openProf1Button" parentArray="goldRingButtons" inherits="SamsUiTopBarGoldRingButton" hidden="true">
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent.openCookingButton" relativePoint="LEFT" x="-10" y="0"/>
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="tooltipText" value="-" type="string"/>
+                </KeyValues>
+            </Button>
+
+            <Button parentKey="openProf2Button" parentArray="goldRingButtons" inherits="SamsUiTopBarGoldRingButton" hidden="true">
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent.openProf1Button" relativePoint="LEFT" x="-10" y="0"/>
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="tooltipText" value="-" type="string"/>
+                </KeyValues>
+            </Button>
+
+
+
         </Frames>
 
         <Scripts>
             <OnLoad method="OnLoad"/>
             <OnEvent method="OnEvent"/>
+            <OnUpdate method="OnUpdate"/>
         </Scripts>
 
     </Frame>
 
 
+    <!-- <Frame name="SamsUiBottomPanel" >
+        <Anchors>
+            <Anchor point="BOTTOMLEFT" x="0" y="0"/>
+            <Anchor point="BOTTOMRIGHT" x="0" y="0"/>
+        </Anchors>
+
+        <Size y="160"/>
+
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture atlas="legionmission-complete-background-shaman">
+                    <Anchors>
+                        <Anchor point="BOTTOM" x="0" y="0"/>
+                    </Anchors>
+                    <Size x="320" y="160"/>
+                </Texture>
+            </Layer>
+        </Layers>
+    </Frame> -->
 
 
 
@@ -183,7 +352,14 @@
 
         <Anchors>
             <Anchor point="TOPRIGHT" relativeTo="SamsUiTopBar" relativePoint="BOTTOM" x="-45" y="4"/>
+            <!-- <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOM" x="-45" y="100"/> -->
         </Anchors>
+
+        <Animations>
+            <AnimationGroup parentKey="splashAnim" setToFinalAlpha="true">
+                <Alpha parentKey="fadeIn" childKey="splash" duration="2.5" fromAlpha="1" toAlpha="0" smoothing="OUT"/>
+            </AnimationGroup>
+        </Animations>
 
         <Layers>
             <Layer level="BACKGROUND">
@@ -210,6 +386,14 @@
                     <Size x="58" y="58"/>
                     <Anchors>
                         <Anchor point="RIGHT" relativePoint="LEFT" x="5" y="-2"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY" textureSubLevel="4">
+                <Texture parentKey="splash" atlas="Start-VersusSplash" alpha="0"> <!--Relic-Life-TraitGlow-->
+                    <Size x="80" y="80"/>
+                    <Anchors>
+                        <Anchor point="RIGHT" relativePoint="LEFT" x="10" y="0"/>
                     </Anchors>
                 </Texture>
             </Layer>
@@ -273,6 +457,56 @@
                 </Layers>
 
             </StatusBar>
+
+
+            <Frame parentKey="shieldAuraIcon" frameLevel="6" hidden="true">
+                <Animations>
+                    <AnimationGroup parentKey="anim" looping="REPEAT">
+                        <Rotation parentKey="rotate" childKey="spinner" duration="2.5" degrees="-360">
+                            <Origin point="CENTER" x="0" y="0"/>
+                        </Rotation>
+                    </AnimationGroup>
+                </Animations>
+                <Size x="68" y="68"/>
+                <Anchors>
+                    <!-- <Anchor point="TOPLEFT" x="-68" y="-28"/> -->
+                    <Anchor point="LEFT" relativePoint="RIGHT" x="0" y="0"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND" textureSubLevel="-1">
+                        <Texture parentKey="spinner" atlas="Relic-Water-TraitGlow">
+                            <Size x="80" y="80"/>
+                            <Anchors>
+                                <Anchor point="CENTER" x="0" y="0"/>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                    <Layer level="BACKGROUND" textureSubLevel="0">
+                        <!-- <Texture parentKey="background" atlas="Artifacts-Shaman-KnowledgeRank" setAllPoints="true"> -->
+                        <Texture parentKey="background" atlas="auctionhouse-itemicon-border-white" setAllPoints="true">
+
+                        </Texture>
+                    </Layer>
+                    <Layer level="ARTWORK">
+                        <Texture parentKey="icon">
+                            <Size x="50" y="50"/>
+                            <Anchors>
+                                <Anchor point="CENTER" relativePoint="CENTER" relativeKey="$parent.background" x="1" y="0"/>
+                            </Anchors>
+                        </Texture>
+                        <MaskTexture parentKey="mask" file="Interface/CHARACTERFRAME/TempPortraitAlphaMask" hWrapMode="CLAMPTOBLACKADDITIVE" vWrapMode="CLAMPTOBLACKADDITIVE">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="10" y="-10"/>
+                                <Anchor point="BOTTOMRIGHT" x="-10" y="10"/>
+                            </Anchors>
+                            <MaskedTextures>
+                                <MaskedTexture childKey="icon"/>
+                            </MaskedTextures>
+                        </MaskTexture>
+                    </Layer>
+                </Layers>
+            </Frame>
+
         </Frames>
 
 
@@ -459,7 +693,7 @@
 
 
 
-    <Frame name="SamsUiConfigPanel" mixin="SamsUiConfigPanelMixin" parent="UIParent" inherits="PortraitFrameTemplate" frameStrata="HIGH" enableMouse="true" movable="true" hidden="false">
+    <Frame name="SamsUiConfigPanel" mixin="SamsUiConfigPanelMixin" parent="UIParent" inherits="PortraitFrameTemplate" frameStrata="HIGH" enableMouse="true" movable="true" hidden="true">
         <Size x="800" y="400"/>
         <Anchors>
             <Anchor point="CENTER" x="0" y="0"/>
@@ -541,6 +775,28 @@
                     <Frame parentKey="playerBarConfig" parentArray="frames" setAllPoints="true" hidden="true">
 
                         <Frames>
+
+                            
+                            <CheckButton parentKey="playerBarSetEnabled" inherits="ChatConfigCheckButtonTemplate">
+                                <Size x="24" y="24"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="16" y="-50"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Enabled">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <!-- <FontHeight val="12"/> -->
+                                            <Anchors>
+                                                <Anchor point="LEFT">
+                                                    <offset x="24" y="0"/>
+                                                </Anchor>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers>  
+                            </CheckButton>
+
 
                             <!-- player health config -->
                             <CheckButton parentKey="playerHealthTextCheckButton" inherits="ChatConfigCheckButtonTemplate">
@@ -626,6 +882,29 @@
 
                     <Frame parentKey="targetBarConfig" parentArray="frames" setAllPoints="true" hidden="true">
                         <Frames>
+
+
+                            <CheckButton parentKey="targetBarSetEnabled" inherits="ChatConfigCheckButtonTemplate">
+                                <Size x="24" y="24"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="16" y="-50"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Enabled">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <!-- <FontHeight val="12"/> -->
+                                            <Anchors>
+                                                <Anchor point="LEFT">
+                                                    <offset x="24" y="0"/>
+                                                </Anchor>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers>  
+                            </CheckButton>
+
+
                             <!-- target health config -->
                             <CheckButton parentKey="targetHealthTextCheckButton" inherits="ChatConfigCheckButtonTemplate">
                                 <Size x="24" y="24"/>
@@ -707,6 +986,108 @@
                         </Frames>
                     </Frame>
 
+                    <Frame parentKey="partyConfig" parentArray="frames" setAllPoints="true" hidden="true">
+
+                        <Frames>
+                            <CheckButton parentKey="enablePartyFrames" inherits="ChatConfigCheckButtonTemplate">
+                                <Size x="24" y="24"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="16" y="-50"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Enabled">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <!-- <FontHeight val="12"/> -->
+                                            <Anchors>
+                                                <Anchor point="LEFT">
+                                                    <offset x="24" y="0"/>
+                                                </Anchor>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers>  
+                            </CheckButton>
+
+                            <CheckButton parentKey="unitFramesCopyPlayer" inherits="ChatConfigCheckButtonTemplate">
+                                <Size x="24" y="24"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="16" y="-80"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Copy player spells">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <Anchors>
+                                                <Anchor point="LEFT">
+                                                    <offset x="24" y="0"/>
+                                                </Anchor>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers> 
+                            </CheckButton>
+
+                            <CheckButton parentKey="unitFramesVerticalLayout" inherits="ChatConfigCheckButtonTemplate">
+                                <Size x="24" y="24"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="16" y="-110"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Stack unit frames vertically">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <Anchors>
+                                                <Anchor point="LEFT">
+                                                    <offset x="24" y="0"/>
+                                                </Anchor>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers> 
+                            </CheckButton>
+
+                            <Slider name="SamsUiConfigPanelPartyConfigPartyUnitFrameWidth" parentKey="partyUnitFrameWidth" inherits="OptionsSliderTemplate" stepValue="1.0" minValue="20" maxValue="300" defaultValue="100">
+                                <Size x="160" y="16"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="250" y="-74"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Party unit frame width">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <Anchors>
+                                                <Anchor point="TOP">
+                                                    <offset x="0" y="24"/>
+                                                </Anchor>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers> 
+                            </Slider>
+
+                            <Slider name="SamsUiConfigPanelPartyConfigPartyUnitFramesNumSpellButtons" parentKey="partyUnitFramesNumSpellButtons" inherits="OptionsSliderTemplate" stepValue="1.0" minValue="1" maxValue="12" defaultValue="400">
+                                <Size x="160" y="16"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="250" y="-144"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Number of unit frame spell buttons">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <Anchors>
+                                                <Anchor point="TOP">
+                                                    <offset x="0" y="24"/>
+                                                </Anchor>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers> 
+                            </Slider>
+
+                        </Frames>
+                    </Frame>
+
                     <Frame parentKey="minimapConfig" parentArray="frames" setAllPoints="true" hidden="true">
 
                         <Frames>
@@ -719,6 +1100,28 @@
                             </Slider>
                         </Frames>
                     </Frame>
+
+                    <Frame parentKey="sessions" parentArray="frames" setAllPoints="true" hidden="true">
+
+                        <Frames>
+
+                            <Frame parentKey="listview" inherits="SamsUiListviewTemplate">
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="4" y="-30"/>
+                                    <Anchor point="BOTTOMRIGHT" x="-4" y="4"/>
+                                </Anchors>
+                                <KeyValues>
+                                    <KeyValue key="frameType" value="FRAME" type="string"/>
+                                    <KeyValue key="itemTemplate" value="SamsUiConfigPanelSessionsListviewItemTemplate" type="string"/>
+                                    <KeyValue key="elementHeight" value="80" type="number"/>
+                                    <KeyValue key="isSelectable" value="true" type="boolean"/>
+                                </KeyValues>
+                            </Frame>
+
+                        </Frames>
+
+                    </Frame>
+
 
                     <Frame parentKey="databaseControl" parentArray="frames" setAllPoints="true" hidden="true">
 
@@ -753,13 +1156,13 @@
                                         <FontString inherits="GameFontNormalLarge" text="XP">
                                             <!-- <Color r="1" g="1" b="1"/> -->
                                             <Anchors>
-                                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="380" y="0"/>
+                                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="360" y="0"/>
                                             </Anchors>
                                         </FontString>
                                         <FontString inherits="GameFontNormalLarge" text="Tradeskills">
                                             <!-- <Color r="1" g="1" b="1"/> -->
                                             <Anchors>
-                                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="430" y="0"/>
+                                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="440" y="0"/>
                                             </Anchors>
                                         </FontString>
                                         <FontString inherits="GameFontNormalLarge" text="Delete">
@@ -797,6 +1200,340 @@
             <OnDragStop>
                 self:StopMovingOrSizing()
             </OnDragStop>
+        </Scripts>
+    </Frame>
+
+
+    <Frame name="SamsUiCharacterFrame" mixin="SamsUiCharacterFrameMixin" parent="UIParent" inherits="PortraitFrameTemplate" frameStrata="HIGH" enableMouse="true" movable="true" hidden="true">
+        <Size x="700" y="500"/>
+        <Anchors>
+            <Anchor point="CENTER" x="0" y="0"/>
+        </Anchors>
+
+        <Layers>
+            <Layer level="OVERLAY">
+                <FontString parentKey="characterName" inherits="GameFontNormalLarge" text="Kylanda">
+                    <Anchors>
+                        <Anchor point="TOP" x="0" y="-3"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+
+        <Frames>
+
+            <Button name="$parentTab1" inherits="CharacterFrameTabButtonTemplate" id="1" text="Character">
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" x="20" y="-31"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        self:GetParent():TabButton_Clicked(1, "paperdoll")
+                    </OnClick>
+                </Scripts>
+            </Button>
+
+            <Button name="$parentTab2" inherits="CharacterFrameTabButtonTemplate" id="2" text="Trade skills">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="0" y="0"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        self:GetParent():TabButton_Clicked(2, "tradeskills")
+                    </OnClick>
+                </Scripts>
+            </Button>
+            
+            
+            <Frame parentKey="paperdoll" parentArray="panels" setAllPoints="true" useParentLevel="true">
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture parentKey="background" useParentLevel="true">
+                            <Size x="480"/>
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="0" y="-25"/>
+                                <Anchor point="BOTTOMLEFT" x="0" y="4"/>
+                            </Anchors>
+                        </Texture>
+                        <Texture parentKey="backgroundRight" useParentLevel="true" atlas="ClassHall_InfoBoxMission-BackgroundTile">
+                            <Anchors>
+                                <Anchor point="TOPRIGHT" x="0" y="-25"/>
+                                <Anchor point="BOTTOMLEFT" x="480" y="4"/>
+                                <Anchor point="BOTTOMRIGHT" x="-6" y="4"/>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+
+
+                <Frames>
+                    <DressUpModel parentKey="playerModel" enableMouse="true">
+                        <Size x="480" y="460"/>
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="0" y="-25"/>
+                        </Anchors>
+                    </DressUpModel>
+
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="HEADSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="10" y="-60"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="NECKSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="10" y="-100"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="SHOULDERSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="10" y="-140"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="BACKSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="10" y="-180"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="CHESTSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="10" y="-220"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="SHIRTSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="10" y="-260"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="TABARDSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="10" y="-300"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="WRISTSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="10" y="-340"/>
+                        </Anchors>
+                    </Frame>
+
+                    <!-- column 2 -->
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="HANDSSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="420" y="-60"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="WAISTSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="420" y="-100"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="LEGSSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="420" y="-140"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="FEETSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="420" y="-180"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="FINGER0SLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="420" y="-220"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="FINGER1SLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="420" y="-260"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="TRINKET0SLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="420" y="-300"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="TRINKET1SLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="420" y="-340"/>
+                        </Anchors>
+                    </Frame>
+
+                    <!-- weapons -->
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="MAINHANDSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="140" y="-425"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="SECONDARYHANDSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="226" y="-425"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="RANGEDSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="314" y="-425"/>
+                        </Anchors>
+                    </Frame>
+
+                    <Frame parentKey="stats">
+                        <Size x="220"/>
+                        <Anchors>
+                            <Anchor point="TOPRIGHT" x="0" y="-25"/>
+                            <Anchor point="BOTTOMRIGHT" x="0" y="4"/>
+                        </Anchors>
+
+                        <Layers>
+                            <Layer level="ARTWORK">
+                                <Texture parentKey="ilvlTitleBackground" atlas="UI-Character-Info-Title">
+                                    <Size x="200" y="40"/>
+                                    <Anchors>
+                                        <Anchor point="TOP" x="0" y="-40"/>
+                                    </Anchors>
+                                </Texture>
+                                <Texture parentKey="ilvlBackground" atlas="UI-Character-Info-ItemLevel-Bounce" alpha="0.3">
+                                    <Size x="200" y="40"/>
+                                    <Anchors>
+                                        <Anchor point="TOP" relativeKey="$parent.ilvlTitleBackground" relativePoint="BOTTOM" x="0" y="0"/>
+                                    </Anchors>
+                                </Texture>
+                                <Texture parentKey="enhancementTitleBackground" atlas="UI-Character-Info-Title">
+                                    <Size x="200" y="40"/>
+                                    <Anchors>
+                                        <Anchor point="TOP" relativeKey="$parent.ilvlBackground" relativePoint="BOTTOM" x="0" y="0"/>
+                                    </Anchors>
+                                </Texture>
+                            </Layer>
+                            
+                            <Layer level="OVERLAY">
+                                <FontString parentKey="ilvlTitleLabel" inherits="GameFontNormal" text="Item Level">
+                                    <Size x="200" y="40"/>
+                                    <Color r="1" g="1" b="1"/>
+                                    <Anchors>
+                                        <Anchor point="TOP" relativeKey="$parent.ilvlTitleBackground" relativePoint="TOP" x="0" y="0"/>
+                                    </Anchors>
+                                </FontString>
+                                <FontString parentKey="ilvlLabel" text="100.00" inherits="GameFontNormalLarge">
+                                    <Size x="200" y="40"/>
+                                    <Color r="1" g="1" b="1"/>
+                                    <Anchors>
+                                        <Anchor point="TOP" relativeKey="$parent.ilvlBackground" relativePoint="TOP" x="0" y="0"/>
+                                    </Anchors>
+                                </FontString>
+                                <FontString parentKey="enhancementTitleLabel" inherits="GameFontNormal" text="Enhancements">
+                                    <Size x="200" y="40"/>
+                                    <Color r="1" g="1" b="1"/>
+                                    <Anchors>
+                                        <Anchor point="TOP" relativeKey="$parent.enhancementTitleBackground" relativePoint="TOP" x="0" y="0"/>
+                                    </Anchors>
+                                </FontString>
+                            </Layer>
+
+                        </Layers>
+
+                        <Frames>
+                            <Frame parentKey="enhancementsListview" inherits="SamsUiListviewTemplate">
+                                <Size x="220" y="200"/>
+                                <Anchors>
+                                    <Anchor point="TOP" relativeKey="$parent.enhancementTitleBackground" relativePoint="BOTTOM" x="0" y="10"/>
+                                </Anchors>
+                                <KeyValues>
+                                    <KeyValue key="frameType" value="FRAME" type="string"/>
+                                    <KeyValue key="itemTemplate" value="SamsUiCharacterFramePaperdollStatsInfoRowTemplate" type="string"/>
+                                    <KeyValue key="elementHeight" value="19" type="number"/>
+                                </KeyValues>
+                            </Frame>
+                        </Frames>
+                    </Frame>
+                </Frames>
+
+            </Frame>
+
+
+            <Frame parentKey="tradeskills" parentArray="panels" setAllPoints="true" useParentLevel="true">
+
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture atlas="book-bg" useParentLevel="true">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="0" y="-28"/>
+                                <Anchor point="BOTTOMRIGHT" x="-6" y="4"/>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+            </Frame>
+
+        </Frames>
+
+
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+            <OnShow method="OnShow"/>
+            <OnEvent method="OnEvent"/>
+            <OnDragStart>
+                self:StartMoving()
+            </OnDragStart>
+            <OnDragStop>
+                self:StopMovingOrSizing()
+            </OnDragStop>
+        </Scripts>
+
+    </Frame>
+
+    <Frame name="SamsUiPartyFrame" mixin="SamsUiPartyFrameMixin">
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture atlas="ClassHall_StoneFrame-BackgroundTile" setAllPoints="true" alpha="0.5" horizTile="true"/>
+            </Layer>
+        </Layers>
+        <Size x="360"/>
+        <Anchors>
+            <Anchor point="CENTER" x="0" y="0"/>
+        </Anchors>
+        <Frames>
+            <Button parentKey="player" parentArray="unitFrames" inherits="SamsUiPartyUnitFrame">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="0" y="0"/>
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="unit" value="player"/>
+                </KeyValues>
+            </Button>
+            <Button parentKey="party1" parentArray="unitFrames" inherits="SamsUiPartyUnitFrame">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.player" relativePoint="BOTTOM" x="3" y="0"/>
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="unit" value="party1"/>
+                </KeyValues>
+            </Button>
+            <Button parentKey="party2" parentArray="unitFrames" inherits="SamsUiPartyUnitFrame">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.party1" relativePoint="BOTTOM" x="3" y="0"/>
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="unit" value="party2"/>
+                </KeyValues>
+            </Button>
+            <Button parentKey="party3" parentArray="unitFrames" inherits="SamsUiPartyUnitFrame">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.party2" relativePoint="BOTTOM" x="3" y="0"/>
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="unit" value="party3"/>
+                </KeyValues>
+            </Button>
+            <Button parentKey="party4" parentArray="unitFrames" inherits="SamsUiPartyUnitFrame">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.party3" relativePoint="BOTTOM" x="3" y="0"/>
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="unit" value="party4"/>
+                </KeyValues>
+            </Button>
+        </Frames>
+
+        <Scripts>
+            <OnLoad method="OnLoad"/>
         </Scripts>
     </Frame>
 

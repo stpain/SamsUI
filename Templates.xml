@@ -18,10 +18,117 @@
     </Frame>
 
 
-    <Button name="SamsUiTopBarDropdownMenuButton" mixin="SamsUiTopBarDropdownMenuButtonMixin" virtual="true">
-        <NormalTexture atlas="auctionhouse-ui-dropdown-arrow-up"/>
-        <PushedTexture atlas="auctionhouse-ui-dropdown-arrow-down"/>
-        <HighlightTexture atlas="chatframe-button-highlightalert"/>
+    <Frame name="SamsUiListviewTemplateNoMixin" virtual="true">
+        <Frames>
+            <Frame parentKey="scrollBox" inherits="WowScrollBoxList"/>
+            <EventFrame parentKey="scrollBar" inherits="WowTrimScrollBar">
+                <Anchors>
+                    <Anchor point="TOPRIGHT"/>
+                    <Anchor point="BOTTOMRIGHT"/>
+                </Anchors>
+            </EventFrame>
+        </Frames>
+    </Frame>
+
+
+    <Button name="SamsUiMerchantFrameCharacterItemsListviewItemTemplate" mixin="SamsUiMerchantFrameCharacterItemsListviewItemTemplateMixin" enableMouse="true" virtual="true" inherits="SamsUiSecureMacroButton">
+
+        <NormalTexture atlas="groupfinder-button-cover"/>
+        <PushedTexture atlas="groupfinder-button-cover-down"/>
+
+        <HighlightTexture atlas="search-highlight-large"/>
+
+        <!-- <NormalTexture file="Interface/AuctionFrame/AuctionHouse">
+            <TexCoords left="0.0059765625" right="0.2616015625" top="0.857421875" bottom="0.940" />
+        </NormalTexture>
+        <PushedTexture file="Interface/AuctionFrame/AuctionHouse">
+            <TexCoords left="0.0059765625" right="0.2616015625" top="0.857421875" bottom="0.940" />
+        </PushedTexture>
+        <HighlightTexture atlas="PetList-ButtonHighlight"/> -->
+
+
+        <Animations>
+            <AnimationGroup parentKey="anim" setToFinalAlpha="true">
+                <Alpha parentKey="fadeIn" duration="0.33" fromAlpha="0" toAlpha="1" smoothing="OUT"/>
+                <!-- <Translation parentKey="translate" duration="1" offsetX="0" offsetY="-28" smoothing="OUT"/> -->
+            </AnimationGroup>
+        </Animations>
+
+        <Layers>
+            <Layer level="OVERLAY">
+                <Texture parentKey="icon">
+                    <Size x="18" y="18"/>
+                    <TexCoords left="0.1" right="0.9" top="0.1" bottom="0.9" />
+                    <Anchors>
+                        <Anchor point="LEFT" x="4" y="0"/>
+                    </Anchors>
+                </Texture>
+                <FontString parentKey="link" inherits="GameFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="LEFT" relativeKey="$parent.icon" relativePoint="RIGHT" x="2" y="0"/>
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="value" inherits="GameFontNormalSmall">
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="RIGHT" x="-6" y="0"/>
+                    </Anchors>
+                </FontString>
+
+            </Layer>
+        </Layers>
+
+        <Scripts>
+            <OnEnter method="OnEnter"/>
+            <OnLeave method="OnLeave"/>
+        </Scripts>
+
+    </Button>
+
+
+    <Button name="SamsUiTopBarGoldRingButton" mixin="SamsUiTopBarGoldRingButtonMixin" inherits="SamsUiSecureMacroButton" enableMouse="true" virtual="true">
+
+        <Size x="44" y="44"/>
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture parentKey="icon" file="interface/icons/inv_misc_bag_09.blp">
+                    <Size x="32" y="32"/>
+                    <Anchors>
+                        <Anchor point="CENTER" x="0" y="0"/>
+                    </Anchors>
+                </Texture>
+                <MaskTexture parentKey="mask" file="Interface/CHARACTERFRAME/TempPortraitAlphaMask" hWrapMode="CLAMPTOBLACKADDITIVE" vWrapMode="CLAMPTOBLACKADDITIVE">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="2" y="-2"/>
+                        <Anchor point="BOTTOMRIGHT" x="-2" y="2"/>
+                    </Anchors>
+                    <MaskedTextures>
+                        <MaskedTexture childKey="icon"/>
+                    </MaskedTextures>
+                </MaskTexture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <Texture atlas="adventureguide-rewardring" setAllPoints="true">
+                    <Size x="54" y="54"/>
+                    <Anchors>
+                        <Anchor point="CENTER" x="0" y="0"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="HIGHLIGHT">
+                <Texture atlas="worldquest-questmarker-abilityhighlight" setAllPoints="true">
+                    <Size x="56" y="56"/>
+                    <Anchors>
+                        <Anchor point="CENTER" x="0" y="1"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+
+        <Scripts>
+            <OnEnter method="OnEnter"/>
+            <OnLeave method="OnLeave"/>
+        </Scripts>
     </Button>
 
 
@@ -45,18 +152,20 @@
         <Scripts>
             <OnLoad method="OnLoad"/>
             <OnShow method="OnShow"/>
+            <OnLeave method="OnLeave"/>
         </Scripts>
     </Button>
 
 
-    <Button name="SamsUiInsecureMacroButton" virtual="true" inherits="InsecureActionButtonTemplate" registerForClicks="LeftButtonUp,RightButtonUp">
+    <Button name="SamsUiSecureMacroButton" virtual="true" inherits="SecureActionButtonTemplate" registerForClicks="LeftButtonUp,RightButtonUp">
         <Attributes>
             <Attribute name="type1" value="macro"/>
+            <Attribute name="type2" value="macro"/>
         </Attributes>
     </Button>
 
 
-    <Button name="SamsUiTopBarInsecureMacroMenuButton" mixin="SamsUiTopBarInsecureMacroMenuButtonMixin" inherits="SamsUiInsecureMacroButton" virtual="true">
+    <Button name="SamsUiTopBarSecureMacroContainerMenuButton" mixin="SamsUiTopBarSecureMacroContainerMenuButtonMixin" inherits="SamsUiSecureMacroButton" virtual="true">
 
         <NormalTexture atlas="groupfinder-button-cover"/>
         <PushedTexture atlas="groupfinder-button-cover-down"/>
@@ -94,7 +203,7 @@
 
         <Scripts>
             <OnLoad method="OnLoad"/>
-            <OnMouseDown method="OnMouseDown"/>
+            <OnMouseUp method="OnMouseUp"/>
             <OnShow method="OnShow"/>
             <OnHide method="OnHide"/>
             <OnEnter method="OnEnter"/>
@@ -104,7 +213,7 @@
     </Button>
 
 
-    <Button name="SamsUiTopBarMainMenuButton" mixin="SamsUiTopBarMainMenuButtonMixin" inherits="SamsUiInsecureMacroButton" virtual="true">
+    <Button name="SamsUiTopBarMainMenuButton" mixin="SamsUiTopBarMainMenuButtonMixin" inherits="SamsUiSecureMacroButton" virtual="true">
         
         <!-- <NormalTexture file="Interface/PetBattles/PetBattleHUDAtlas">
             <TexCoords left="0" right="0.38328" top="0.5209" bottom="0.6089"/>
@@ -151,13 +260,17 @@
 
 
     <Button name="SamsUiConfigPanelMenuButtonTemplate" mixin="SamsUiConfigPanelMenuButtonMixin" virtual="true">
-        <NormalTexture file="Interface/AuctionFrame/AuctionHouse">
+        <!-- <NormalTexture file="Interface/AuctionFrame/AuctionHouse">
             <TexCoords left="0.0059765625" right="0.2616015625" top="0.857421875" bottom="0.940" />
         </NormalTexture>
         <PushedTexture file="Interface/AuctionFrame/AuctionHouse">
             <TexCoords left="0.0059765625" right="0.2616015625" top="0.857421875" bottom="0.940" />
         </PushedTexture>
-        <HighlightTexture atlas="PetList-ButtonHighlight"/>
+        <HighlightTexture atlas="GarrMission_FollowerListButton-Highlight"/> -->
+
+        <NormalTexture atlas="groupfinder-button-cover"/>
+        <PushedTexture atlas="groupfinder-button-cover-down"/>
+        <HighlightTexture atlas="search-highlight"/>
 
         <Layers>
             <Layer level="OVERLAY">
@@ -178,7 +291,6 @@
             <OnClick method="OnClick"/>
         </Scripts>
     </Button>
-
 
 
     <Frame name="SamsUiConfigPanelDatabaseControlListviewItemTemplate" mixin="SamsUiConfigPanelDatabaseControlListviewItemTemplateMixin" enableMouse="true" virtual="true">
@@ -203,21 +315,21 @@
                     </Anchors>
                 </FontString>
                 <FontString parentKey="level" inherits="GameFontNormal" justifyH="LEFT">
-                    <Size x="50"/>
+                    <Size x="30"/>
                     <Color r="1" g="1" b="1"/>
                     <Anchors>
                         <Anchor point="LEFT" relativeKey="$parent.class" relativePoint="RIGHT" x="2" y="0"/>
                     </Anchors>
                 </FontString>
                 <FontString parentKey="xp" inherits="GameFontNormal" justifyH="LEFT">
-                    <Size x="60"/>
+                    <Size x="90"/>
                     <Color r="1" g="1" b="1"/>
                     <Anchors>
-                        <Anchor point="LEFT" relativeKey="$parent.level" relativePoint="RIGHT" x="10" y="0"/>
+                        <Anchor point="LEFT" relativeKey="$parent.level" relativePoint="RIGHT" x="18" y="0"/>
                     </Anchors>
                 </FontString>
                 <FontString parentKey="tradeskills" inherits="GameFontNormal" justifyH="LEFT">
-                    <Size x="60"/>
+                    <Size x="50"/>
                     <Color r="1" g="1" b="1"/>
                     <Anchors>
                         <Anchor point="LEFT" relativeKey="$parent.xp" relativePoint="RIGHT" x="10" y="0"/>
@@ -245,4 +357,335 @@
             <OnLoad method="OnLoad"/>
         </Scripts>
     </Frame>
+
+
+    <Frame name="SamsUiItemIconRing" mixin="SamsUiItemIconRingMixin" enableMouse="true" virtual="true">
+        <Animations>
+            <AnimationGroup parentKey="anim" looping="REPEAT">
+                <Rotation parentKey="rotate" childKey="spinner" duration="2.5" degrees="-360">
+                    <Origin point="CENTER" x="0" y="0"/>
+                </Rotation>
+            </AnimationGroup>
+        </Animations>
+        <Size x="50" y="50"/>
+        <Anchors>
+            <Anchor point="TOPLEFT" x="-68" y="-28"/>
+        </Anchors>
+        <Layers>
+            <Layer level="BACKGROUND" textureSubLevel="-1">
+                <Texture parentKey="spinner" atlas="Relic-Water-TraitGlow" hidden="true">
+                    <Size x="50" y="50"/>
+                    <Anchors>
+                        <Anchor point="CENTER" x="0" y="0"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="BACKGROUND" textureSubLevel="0">
+                <Texture parentKey="ring" atlas="auctionhouse-itemicon-border-white" setAllPoints="true">
+
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture parentKey="icon">
+                    <Size x="36" y="36"/>
+                    <Anchors>
+                        <Anchor point="CENTER" relativePoint="CENTER" relativeKey="$parent.background" x="0" y="0"/>
+                    </Anchors>
+                </Texture>
+                <MaskTexture parentKey="mask" file="Interface/CHARACTERFRAME/TempPortraitAlphaMask" hWrapMode="CLAMPTOBLACKADDITIVE" vWrapMode="CLAMPTOBLACKADDITIVE">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="10" y="-10"/>
+                        <Anchor point="BOTTOMRIGHT" x="-10" y="10"/>
+                    </Anchors>
+                    <MaskedTextures>
+                        <MaskedTexture childKey="icon"/>
+                    </MaskedTextures>
+                </MaskTexture>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnEnter method="OnEnter"/>
+            <OnLeave method="OnLeave"/>
+        </Scripts>
+    </Frame>
+
+
+    <Frame name="SamsUiCharacterFramePaperdollInfoPanelTemplate" virtual="true">
+        <Size x="200" y="40"/>
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture parentKey="titleBackground" atlas="UI-Character-Info-Title">
+                    <Size x="200" y="40"/>
+                    <Anchors>
+                        <Anchor point="TOP" x="0" y="0"/>
+                    </Anchors>
+                </Texture>          
+            </Layer>
+            <Layer level="OVERLAY">
+                <FontString parentKey="titleLabel" inherits="GameFontNormal" text="label">
+                    <Size x="200" y="40"/>
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="TOP" x="0" y="0"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+    </Frame>
+
+
+    <Frame name="SamsUiConfigPanelSessionsListviewItemTemplate" mixin="SamsUiConfigPanelSessionsListviewItemTemplateMixin" virtual="true" enableMouse="true">
+
+        <Layers>
+            <Layer level="HIGHLIGHT">
+                <Texture atlas="search-highlight-large" setAllPoints="true"/>
+            </Layer>
+            <Layer level="BACKGROUND">
+                <Texture atlas="auctionhouse-itemheaderframe" setAllPoints="true"/>
+            </Layer>
+            <Layer level="BACKGROUND" textureSubLevel="-1">
+                <Texture parentKey="classIcon" alpha="0.3">
+                    <Anchors>
+                        <Anchor point="RIGHT" x="-4" y="0"/>
+                    </Anchors>      
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <FontString parentKey="timeInfo" inherits="GameFontNormal" justifyH="LEFT">
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="4" y="-4"/>
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="name" inherits="GameFontNormal" justifyH="LEFT">
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="4" y="-24"/>
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="moneyInfo" inherits="GameFontNormal" justifyH="LEFT">
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT" x="-4" y="4"/>
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="questInfo" inherits="GameFontNormal" justifyH="LEFT">
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="4" y="-44"/>
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="mobInfo" inherits="GameFontNormal" justifyH="LEFT">
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="4" y="-64"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+
+        <Frames>
+            <Button parentKey="delete">
+                <NormalTexture atlas="transmog-icon-remove"/>
+                <HighlightTexture atlas="transmog-frame-pink"/>
+                <Size x="24" y="24"/>
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="-4" y="-4"/>
+                </Anchors>
+            </Button>
+        </Frames>
+    </Frame>
+
+
+    <Frame name="SamsUiCharacterFramePaperdollStatsInfoRowTemplate" mixin="SamsUiCharacterFramePaperdollStatsInfoRowTemplateMixin" virtual="true">
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="highlight" atlas="UI-Character-Info-Line-Bounce" setAllPoints="true" alpha="0.3"/>
+            </Layer>
+            <Layer level="OVERLAY">
+                <FontString parentKey="label" inherits="GameFontNormalSmall">
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="LEFT" x="4" y="0"/>
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="value" inherits="GameFontNormalSmall">
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="RIGHT" x="-4" y="0"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+    </Frame>
+
+
+    <Button name="SamsUiPartyFrameSpellButton" enableMouse="true" inherits="SamsUiSecureMacroButton" virtual="true">
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture parentKey="icon" setAllPoints="true" atlas="search-iconframe-large">
+                    <TexCoords left="0.1" right="0.9" top="0.1" bottom="0.9"/>
+                </Texture>
+            </Layer>
+            <Layer level="HIGHLIGHT">
+                <Texture parentKey="highlight" setAllPoints="true" atlas="WoWShare-Highlight" />
+            </Layer>
+        </Layers>
+    </Button>   
+
+
+    <Button name="SamsUiPartyUnitFrame" mixin="SamsUiPartyUnitFrameMixin" virtual="true" enableMouse="true" inherits="SecureUnitButtonTemplate">
+        <Layers>
+            <Layer level="BACKGROUND" textureSubLevel="-2">
+                <Texture parentKey="border" alpha="0.6">
+                    <Color r="0" g="0" b="0"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="-1" y="1"/>
+                        <Anchor point="BOTTOMRIGHT" x="1" y="-1"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="nameBackground" atlas="auctionhouse-selltab-middle" alpha="1.0">
+                    <Size y="12"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="0" y="0"/>
+                        <Anchor point="TOPRIGHT" x="0" y="0"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="BACKGROUND" textureSubLevel="-1">
+                <Texture parentKey="background" alpha="0.3">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="0" y="-10"/>
+                        <Anchor point="BOTTOMRIGHT" x="0" y="0"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <FontString parentKey="name" inherits="GameFontNormalSmall">
+                    <Size y="12"/>
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="0" y="0"/>
+                        <Anchor point="TOPRIGHT" x="0" y="0"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+
+        <Frames>
+            <Frame parentKey="target">
+                <Size y="22"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="0" y="20"/>
+                    <Anchor point="TOPRIGHT" x="0" y="20"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND" textureSubLevel="-1">
+                        <Texture parentKey="background" file="Interface/MainMenuBar/MainMenuBar">
+                            <TexCoords left="0.3017578125" right="0.5927734375" top="0.83296875" bottom="0.99609375"/>
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="0" y="0"/>
+                                <Anchor point="BOTTOMRIGHT" x="0" y="0"/>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                    <Layer level="OVERLAY">
+                        <FontString parentKey="name" inherits="GameFontNormalTiny2">
+                            <Size y="10"/>
+                            <Color r="1" g="1" b="1"/>
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="0" y="0"/>
+                                <Anchor point="TOPRIGHT" x="0" y="0"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <StatusBar parentKey="castBar" minValue="0" maxValue="100" defaultValue="0" stepValue="0.1" orientation="HORIZONTAL" enableMouse="true">
+                        <Size y="10"/>
+                        <Anchors>
+                            <Anchor point="BOTTOMLEFT" x="12" y="2"/>
+                            <Anchor point="BOTTOMRIGHT" x="-2" y="2"/>
+                        </Anchors>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0.14" g="0.65" b="0.28"/>
+                        <Layers>
+                            <Layer level="OVERLAY">
+                                <Texture parentKey="icon">
+                                    <Size x="10"/>
+                                    <Anchors>
+                                        <Anchor point="TOPLEFT" x="-10" y="0"/>
+                                        <Anchor point="BOTTOMLEFT" x="-10" y="0"/>
+                                    </Anchors>
+                                </Texture>
+                                <FontString parentKey="text" inherits="GameFontNormalTiny2">
+                                    <Color r="1" g="1" b="1"/>
+                                    <Size y="10"/>
+                                    <Anchors>
+                                        <Anchor point="LEFT" relativeKey="$parent.icon" relativePoint="RIGHT" x="1" y="0"/>
+                                        <Anchor point="RIGHT" x="-1" y="0"/>
+                                    </Anchors>
+                                </FontString>
+                            </Layer>
+                        </Layers>
+                    </StatusBar>
+                </Frames>
+            </Frame>
+            <StatusBar parentKey="healthBar" minValue="0" maxValue="100" defaultValue="40" orientation="HORIZONTAL">
+                <Size y="17"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.name" relativePoint="BOTTOMLEFT" x="0" y="-1"/>
+                    <Anchor point="TOPRIGHT" relativeKey="$parent.name" relativePoint="BOTTOMRIGHT" x="0" y="-1"/>
+                </Anchors>
+                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarColor r="0.0" g="1.0" b="0.0"/>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString parentKey="text" inherits="GameFontNormal">
+                            <Color r="1" g="1" b="1"/>
+                            <Size y="20"/>
+                            <Anchors>
+                                <Anchor point="CENTER" x="0" y="0"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                    <Layer level="BACKGROUND">
+                        <Texture parentKey="background" alpha="0.3" setAllPoints="true">
+                            <Color r="0" g="0" b="0"/>
+                        </Texture>
+                    </Layer>
+                </Layers>
+            </StatusBar>
+            <StatusBar parentKey="powerBar" minValue="0" maxValue="100" defaultValue="90" orientation="HORIZONTAL">
+                <Size y="6"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.healthBar" relativePoint="BOTTOMLEFT" x="0" y="0"/>
+                    <Anchor point="TOPRIGHT" relativeKey="$parent.healthBar" relativePoint="BOTTOMRIGHT" x="0" y="0"/>
+                </Anchors>
+                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarColor r="0.0" g="0.0" b="1.0" a="0.7"/>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString parentKey="text" inherits="GameFontNormalTiny">
+                            <Color r="1" g="1" b="1"/>
+                            <Size y="10"/>
+                            <Anchors>
+                                <Anchor point="CENTER" x="0" y="0"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </StatusBar>
+        </Frames>
+
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+            <OnUpdate method="OnUpdate"/>
+            <OnEnter method="OnEnter"/>
+            <OnLeave method="OnLeave"/>
+        </Scripts>
+    </Button>
+
 </UI>
