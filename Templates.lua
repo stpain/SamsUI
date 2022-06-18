@@ -2,8 +2,105 @@
 
 local name, addon = ...
 
-
+local L = addon.locales;
 local Util = addon.Util;
+
+
+SamsUiSystemTrayButtonMixin = {}
+
+function SamsUiSystemTrayButtonMixin:OnLeave()
+    GameTooltip_SetDefaultAnchor(GameTooltip, UIParent)
+end
+
+
+
+
+
+
+SamsUiStartMenuButtonMixin = {}
+function SamsUiStartMenuButtonMixin:OnLoad()
+
+end
+function SamsUiStartMenuButtonMixin:SetDataBinding(binding, height)
+    self:SetHeight(height)
+    self.label:SetText(binding.name)
+
+    self.icon:SetSize(height-2, height-2)
+
+    if binding.button then
+        if binding.button.icon then
+            self.icon:SetTexture(binding.button.icon:GetTexture())
+        end
+        self:SetScript("OnMouseDown", function(_, button)
+            if binding.button:GetScript("OnClick") then
+                binding.button:GetScript("OnClick")(binding.button, button)
+            end
+            GameMenuFrame:Hide()
+        end)
+        self:SetScript("OnEnter", function()
+            if binding.button:GetScript("OnEnter") then
+                binding.button:GetScript("OnEnter")(binding.button)
+            end
+        end)
+        self:SetScript("OnLeave", function()
+            if binding.button:GetScript("OnLeave") then
+                binding.button:GetScript("OnLeave")(binding.button)
+            end
+        end)
+
+        binding.button:Hide()
+        binding.button:ClearAllPoints()
+        binding.button:SetPoint("RIGHT", self, "RIGHT", 0, 0)
+
+    elseif binding.macrotext1 then
+
+        if binding.macrotext1:find("Mining") then
+            binding.macrotext1 = [[/cast Smelting]];
+        end
+        self:SetAttribute("macrotext1", binding.macrotext1)
+
+        if binding.iconFileID then
+            self.icon:SetTexture(binding.iconFileID)
+        end
+        if binding.iconAtlas then
+            if binding.iconAtlas == "Mobile-Engineering" then
+                self.icon:SetAtlas("Mobile-Enginnering")
+            else
+                self.icon:SetAtlas(binding.iconAtlas)
+            end
+        end
+
+    end
+end
+
+function SamsUiStartMenuButtonMixin:ResetDataBinding()
+
+    self.label:SetText(nil)
+    self.icon:SetTexture(nil)
+
+    self:SetScript("OnMouseDown", nil)
+    self:SetScript("OnEnter", nil)
+    self:SetScript("OnLeave", nil)
+
+    self:SetAttribute("macrotext1", " ")
+
+end
+
+
+
+
+SamsUiStartMenuQuickPaneButtonMixin = {}
+function SamsUiStartMenuQuickPaneButtonMixin:OnEnter()
+    if self.tooltip then
+        GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT", 0, 40)
+        GameTooltip:AddLine(self.tooltip)
+        GameTooltip:Show()
+    end
+end
+function SamsUiStartMenuQuickPaneButtonMixin:OnLeave()
+    GameTooltip_SetDefaultAnchor(GameTooltip, UIParent)
+end
+
 
 
 --[[
@@ -148,11 +245,16 @@ end
 
 function SamsUiTopBarSecureMacroContainerMenuButtonMixin:OnMouseUp()
 
+    if self.closeDropdownMenus then
+        C_Timer.After(0.5, function()
+            self.closeDropdownMenus()
+        end)
+    end
+
     if self.func then
         self.func()
     end
 
-    self.count:SetText(self.item.count)
 end
 
 
@@ -383,9 +485,16 @@ function SamsUiConfigPanelDatabaseControlListviewItemTemplateMixin:SetDataBindin
 
     local character = binding.character;
 
-    self.name:SetText(RAID_CLASS_COLORS[character.class]:WrapTextInColorCode(binding.name))
-    self.class:SetText(character.class)
-    self.level:SetText(character.level)
+    if character.class and character.level then
+        self.name:SetText(RAID_CLASS_COLORS[character.class]:WrapTextInColorCode(binding.name))
+        self.class:SetText(character.class)
+        self.level:SetText(character.level)
+    else
+        self.name:SetText(binding.name)
+        self.class:SetText("unknown class")
+        self.level:SetText("unknown level")
+    end
+
 
     if type(character.xp) == "number" and type(character.xpMax) == "number" and type(character.xpRested) == "number" then
         

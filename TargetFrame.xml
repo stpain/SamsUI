@@ -1,0 +1,164 @@
+<UI>
+    <Frame name="SamsUiTargetBar" mixin="SamsUiTargetBarMixin" frameStrata="LOW" frameLevel="4">
+
+        <Size x="200" y="40"/>
+
+        <Anchors>
+            <Anchor point="TOPLEFT" relativeTo="SamsUiTopBar" relativePoint="BOTTOM" x="45" y="4"/>
+        </Anchors>
+
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="background" setAllPoints="true" atlas="ClassHall_StoneFrame-BackgroundTile" alpha="0.8"/>
+                <Texture parentKey="nameBackground" setAllPoints="true" atlas="auctionhouse-nav-button">
+                    <TexCoords left="0.0" right="1.0" top="1.0" bottom="0.0"/>
+                    <Size x="246" y="40"/>
+                    <Anchors>
+                        <Anchor point="TOP" relativePoint="BOTTOM" x="-26" y="15"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="BORDER">
+                <Texture atlas="_BattleSlotFrame-Divider" horizTile="true">
+                    <Size y="8"/>
+                    <Anchors>
+                        <Anchor point="LEFT" x="0" y="0"/>
+                        <Anchor point="RIGHT" x="0" y="0"/>
+                    </Anchors>
+                </Texture>
+                <Texture atlas="_BattleSlotFrame-Divider" horizTile="true">
+                    <Size y="8"/>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="0" y="-6"/>
+                        <Anchor point="BOTTOMRIGHT" x="0" y="-6"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture parentKey="portrait">
+                    <Size x="58" y="58"/>
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" x="-5" y="-2"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <Texture parentKey="portraitRing" atlas="auctionhouse-itemicon-border-white">
+                    <Size x="80" y="80"/>
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" x="-16" y="-3"/>
+                    </Anchors>
+                </Texture>
+                <FontString parentKey="name" inherits="GameFontNormal">
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="BOTTOM" relativeKey="$parent.nameBackground" relativePoint="BOTTOM" x="10" y="6"/>
+                    </Anchors>
+                </FontString>
+
+                <Texture parentKey="factionIcon">
+                    <Size x="44" y="44"/>
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" relativeKey="$parent.nameBackground" x="14" y="-12"/>
+                    </Anchors>
+                </Texture>
+                <FontString parentKey="level" inherits="GameFontNormal" text="?">
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="CENTER" relativeKey="$parent.factionIcon" relativePoint="CENTER" x="0" y="0"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+
+        <Frames>
+            <StatusBar parentKey="healthBar" useParentLevel="true" reverseFill="true" minValue="0" maxValue="100" defaultValue="50" orientation="HORIZONTAL">
+                <Size y="17"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT"  x="0" y="0"/> <!-- set this to -25 and remove the toright x value if using a full fill texture -->
+                    <Anchor point="TOPRIGHT" x="0" y="0"/>
+                </Anchors>
+                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <!-- <BarTexture atlas="_BattleSlotTitle-BG"/>> -->
+                <!-- <BarTexture atlas="Artifacts-Warlock-Header"/> -->
+                <BarColor r="0.0" g="1.0" b="0.0" a="0.9"/>
+
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString parentKey="text" inherits="GameFontNormal">
+                            <Color r="1" g="1" b="1"/>
+                            <Size x="180" y="17"/>
+                            <Anchors>
+                                <Anchor point="CENTER" x="0" y="0"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+
+            </StatusBar>
+
+            <StatusBar parentKey="powerBar" useParentLevel="true" reverseFill="true" minValue="0" maxValue="100" defaultValue="50" orientation="HORIZONTAL">
+                <Size y="17"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT"  x="0" y="1"/> <!-- set this to -25 and remove the toright x value if using a full fill texture -->
+                    <Anchor point="BOTTOMRIGHT" x="0" y="1"/>
+                </Anchors>
+                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <!-- <BarTexture atlas="_BattleSlotTitle-BG"/>> -->
+                <!-- <BarTexture atlas="Artifacts-Warlock-Header"/> -->
+                <BarColor r="0.0" g="0.0" b="1.0" a="0.9"/>
+
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString parentKey="text" inherits="GameFontNormal">
+                            <Color r="1" g="1" b="1"/>
+                            <Size x="180" y="17"/>
+                            <Anchors>
+                                <Anchor point="CENTER" x="0" y="0"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+
+            </StatusBar>
+
+            <Frame parentKey="classificationIcon" frameLevel="6" hidden="true">
+                <Size x="28" y="28"/>
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="70" y="12"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <Texture parentKey="eliteIconRing" atlas="Portrait-Frame-Small" setAllPoints="true">
+                            <Size x="28" y="28"/>
+                        </Texture>
+                    </Layer>
+                    <Layer level="BACKGROUND">
+                        <Texture parentKey="eliteIconBackground" atlas="AdventureMapQuest-PortraitBG">
+                            <Size x="20" y="20"/>
+                            <Anchors>
+                                <Anchor point="CENTER" relativePoint="CENTER" relativeKey="$parent.eliteIconRing" x="0" y="2"/>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                    <Layer level="ARTWORK">
+                        <Texture parentKey="eliteIcon" atlas="nameplates-icon-elite-gold">
+                            <Size x="16" y="16"/>
+                            <Anchors>
+                                <Anchor point="CENTER" relativePoint="CENTER" relativeKey="$parent.eliteIconBackground" x="0" y="-1"/>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+            </Frame>
+        </Frames>
+
+
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+            <OnEvent method="OnEvent"/>
+            <OnUpdate method="OnUpdate"/>
+        </Scripts>
+
+    </Frame>
+</UI>

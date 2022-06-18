@@ -1,0 +1,276 @@
+<UI>
+    <Frame name="SamsUiCharacterFrame" mixin="SamsUiCharacterFrameMixin" parent="UIParent" inherits="PortraitFrameTemplate" frameStrata="HIGH" enableMouse="true" movable="true" hidden="true">
+        <Size x="700" y="500"/>
+        <Anchors>
+            <Anchor point="CENTER" x="0" y="0"/>
+        </Anchors>
+
+        <Layers>
+            <Layer level="OVERLAY">
+                <FontString parentKey="characterName" inherits="GameFontNormalLarge" text="Kylanda">
+                    <Anchors>
+                        <Anchor point="TOP" x="0" y="-3"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+
+        <Frames>
+
+            <Button name="$parentTab1" inherits="CharacterFrameTabButtonTemplate" id="1" text="Character">
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" x="20" y="-31"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        self:GetParent():TabButton_Clicked(1, "paperdoll")
+                    </OnClick>
+                </Scripts>
+            </Button>
+
+            <Button name="$parentTab2" inherits="CharacterFrameTabButtonTemplate" id="2" text="Trade skills">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="0" y="0"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        self:GetParent():TabButton_Clicked(2, "tradeskills")
+                    </OnClick>
+                </Scripts>
+            </Button>
+            
+            
+            <Frame parentKey="paperdoll" parentArray="panels" setAllPoints="true" useParentLevel="true">
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture parentKey="background" useParentLevel="true">
+                            <Size x="480"/>
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="0" y="-25"/>
+                                <Anchor point="BOTTOMLEFT" x="0" y="4"/>
+                            </Anchors>
+                        </Texture>
+                        <Texture parentKey="backgroundRight" useParentLevel="true" atlas="ClassHall_InfoBoxMission-BackgroundTile">
+                            <Anchors>
+                                <Anchor point="TOPRIGHT" x="0" y="-25"/>
+                                <Anchor point="BOTTOMLEFT" x="480" y="4"/>
+                                <Anchor point="BOTTOMRIGHT" x="-6" y="4"/>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+
+
+                <Frames>
+                    <DressUpModel parentKey="playerModel" enableMouse="true">
+                        <Size x="480" y="460"/>
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="0" y="-25"/>
+                        </Anchors>
+                    </DressUpModel>
+
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="HEADSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="10" y="-60"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="NECKSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="10" y="-100"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="SHOULDERSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="10" y="-140"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="BACKSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="10" y="-180"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="CHESTSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="10" y="-220"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="SHIRTSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="10" y="-260"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="TABARDSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="10" y="-300"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="WRISTSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="10" y="-340"/>
+                        </Anchors>
+                    </Frame>
+
+                    <!-- column 2 -->
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="HANDSSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="420" y="-60"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="WAISTSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="420" y="-100"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="LEGSSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="420" y="-140"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="FEETSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="420" y="-180"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="FINGER0SLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="420" y="-220"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="FINGER1SLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="420" y="-260"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="TRINKET0SLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="420" y="-300"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="TRINKET1SLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="420" y="-340"/>
+                        </Anchors>
+                    </Frame>
+
+                    <!-- weapons -->
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="MAINHANDSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="140" y="-425"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="SECONDARYHANDSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="226" y="-425"/>
+                        </Anchors>
+                    </Frame>
+                    <Frame frameLevel="6" parentArray="inventorySlotIcons" parentKey="RANGEDSLOT" inherits="SamsUiItemIconRing">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="314" y="-425"/>
+                        </Anchors>
+                    </Frame>
+
+                    <Frame parentKey="stats">
+                        <Size x="220"/>
+                        <Anchors>
+                            <Anchor point="TOPRIGHT" x="0" y="-25"/>
+                            <Anchor point="BOTTOMRIGHT" x="0" y="4"/>
+                        </Anchors>
+
+                        <Layers>
+                            <Layer level="ARTWORK">
+                                <Texture parentKey="ilvlTitleBackground" atlas="UI-Character-Info-Title">
+                                    <Size x="200" y="40"/>
+                                    <Anchors>
+                                        <Anchor point="TOP" x="0" y="-40"/>
+                                    </Anchors>
+                                </Texture>
+                                <Texture parentKey="ilvlBackground" atlas="UI-Character-Info-ItemLevel-Bounce" alpha="0.3">
+                                    <Size x="200" y="40"/>
+                                    <Anchors>
+                                        <Anchor point="TOP" relativeKey="$parent.ilvlTitleBackground" relativePoint="BOTTOM" x="0" y="0"/>
+                                    </Anchors>
+                                </Texture>
+                                <Texture parentKey="enhancementTitleBackground" atlas="UI-Character-Info-Title">
+                                    <Size x="200" y="40"/>
+                                    <Anchors>
+                                        <Anchor point="TOP" relativeKey="$parent.ilvlBackground" relativePoint="BOTTOM" x="0" y="0"/>
+                                    </Anchors>
+                                </Texture>
+                            </Layer>
+                            
+                            <Layer level="OVERLAY">
+                                <FontString parentKey="ilvlTitleLabel" inherits="GameFontNormal" text="Item Level">
+                                    <Size x="200" y="40"/>
+                                    <Color r="1" g="1" b="1"/>
+                                    <Anchors>
+                                        <Anchor point="TOP" relativeKey="$parent.ilvlTitleBackground" relativePoint="TOP" x="0" y="0"/>
+                                    </Anchors>
+                                </FontString>
+                                <FontString parentKey="ilvlLabel" text="100.00" inherits="GameFontNormalLarge">
+                                    <Size x="200" y="40"/>
+                                    <Color r="1" g="1" b="1"/>
+                                    <Anchors>
+                                        <Anchor point="TOP" relativeKey="$parent.ilvlBackground" relativePoint="TOP" x="0" y="0"/>
+                                    </Anchors>
+                                </FontString>
+                                <FontString parentKey="enhancementTitleLabel" inherits="GameFontNormal" text="Enhancements">
+                                    <Size x="200" y="40"/>
+                                    <Color r="1" g="1" b="1"/>
+                                    <Anchors>
+                                        <Anchor point="TOP" relativeKey="$parent.enhancementTitleBackground" relativePoint="TOP" x="0" y="0"/>
+                                    </Anchors>
+                                </FontString>
+                            </Layer>
+
+                        </Layers>
+
+                        <Frames>
+                            <Frame parentKey="enhancementsListview" inherits="SamsUiListviewTemplate">
+                                <Size x="220" y="200"/>
+                                <Anchors>
+                                    <Anchor point="TOP" relativeKey="$parent.enhancementTitleBackground" relativePoint="BOTTOM" x="0" y="10"/>
+                                </Anchors>
+                                <KeyValues>
+                                    <KeyValue key="frameType" value="FRAME" type="string"/>
+                                    <KeyValue key="itemTemplate" value="SamsUiCharacterFramePaperdollStatsInfoRowTemplate" type="string"/>
+                                    <KeyValue key="elementHeight" value="19" type="number"/>
+                                </KeyValues>
+                            </Frame>
+                        </Frames>
+                    </Frame>
+                </Frames>
+
+            </Frame>
+
+
+            <Frame parentKey="tradeskills" parentArray="panels" setAllPoints="true" useParentLevel="true">
+
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture atlas="book-bg" useParentLevel="true">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="0" y="-28"/>
+                                <Anchor point="BOTTOMRIGHT" x="-6" y="4"/>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+            </Frame>
+
+        </Frames>
+
+
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+            <OnShow method="OnShow"/>
+            <OnEvent method="OnEvent"/>
+            <OnDragStart>
+                self:StartMoving()
+            </OnDragStart>
+            <OnDragStop>
+                self:StopMovingOrSizing()
+            </OnDragStop>
+        </Scripts>
+
+    </Frame>
+</UI>

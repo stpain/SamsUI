@@ -1,0 +1,59 @@
+<UI>
+    <Frame name="SamsUiPartyFrame" mixin="SamsUiPartyFrameMixin">
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture atlas="ClassHall_StoneFrame-BackgroundTile" setAllPoints="true" alpha="0.5" horizTile="true"/>
+            </Layer>
+        </Layers>
+        <Size x="360"/>
+        <Anchors>
+            <Anchor point="CENTER" x="0" y="0"/>
+        </Anchors>
+        <Frames>
+            <Button parentKey="player" parentArray="unitFrames" inherits="SamsUiPartyUnitFrame">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="0" y="0"/>
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="unit" value="player"/>
+                </KeyValues>
+            </Button>
+            <Button parentKey="party1" parentArray="unitFrames" inherits="SamsUiPartyUnitFrame">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.player" relativePoint="BOTTOM" x="3" y="0"/>
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="unit" value="party1"/>
+                </KeyValues>
+            </Button>
+            <Button parentKey="party2" parentArray="unitFrames" inherits="SamsUiPartyUnitFrame">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.party1" relativePoint="BOTTOM" x="3" y="0"/>
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="unit" value="party2"/>
+                </KeyValues>
+            </Button>
+            <Button parentKey="party3" parentArray="unitFrames" inherits="SamsUiPartyUnitFrame">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.party2" relativePoint="BOTTOM" x="3" y="0"/>
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="unit" value="party3"/>
+                </KeyValues>
+            </Button>
+            <Button parentKey="party4" parentArray="unitFrames" inherits="SamsUiPartyUnitFrame">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.party3" relativePoint="BOTTOM" x="3" y="0"/>
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="unit" value="party4"/>
+                </KeyValues>
+            </Button>
+        </Frames>
+
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+        </Scripts>
+    </Frame>
+</UI>

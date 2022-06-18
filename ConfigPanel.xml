@@ -1,0 +1,519 @@
+
+
+<UI>
+
+    <Frame name="SamsUiConfigPanel" mixin="SamsUiConfigPanelMixin" parent="UIParent" inherits="PortraitFrameTemplate" frameStrata="HIGH" enableMouse="true" movable="true" hidden="true">
+        <Size x="800" y="400"/>
+        <Anchors>
+            <Anchor point="CENTER" x="0" y="0"/>
+        </Anchors>
+
+
+        <Frames>
+
+            <Frame parentKey="menuListview" inherits="SamsUiListviewTemplate">
+                <Size x="180"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="6" y="-60"/>
+                    <Anchor point="BOTTOMLEFT" x="6" y="4"/>
+                </Anchors>
+
+                <KeyValues>
+                    <KeyValue key="frameType" value="BUTTON" type="string"/>
+                    <KeyValue key="itemTemplate" value="SamsUiConfigPanelMenuButtonTemplate" type="string"/>
+                    <KeyValue key="elementHeight" value="25" type="number"/>
+                    <KeyValue key="isSelectable" value="true" type="boolean"/>
+                </KeyValues>
+            </Frame>
+
+            <Frame parentKey="contentFrame" inherits="InsetFrameTemplate3">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.menuListview" relativePoint="TOPRIGHT" x="6" y="0"/>
+                    <Anchor point="BOTTOMRIGHT" x="-6" y="4"/>
+                </Anchors>
+
+                <Frames>
+                
+                    <Frame parentKey="generalConfig" parentArray="frames" setAllPoints="true" hidden="true">
+
+                        <Frames>
+
+                            <!-- player health config -->
+                            <CheckButton parentKey="welcomeGuildMembersOnLoginCheckButton" inherits="ChatConfigCheckButtonTemplate">
+                                <Size x="24" y="24"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="16" y="-80"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Welcome guildies on login">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <!-- <FontHeight val="12"/> -->
+                                            <Anchors>
+                                                <Anchor point="LEFT">
+                                                    <offset x="24" y="0"/>
+                                                </Anchor>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers>  
+                            </CheckButton>
+
+                            <EditBox parentKey="welcomeGuildMembersOnLoginMessageArrayEditBox" inherits="InputBoxTemplate" autoFocus="false">
+                                <Size x="200" y="20"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" relativeKey="$parent.welcomeGuildMembersOnLoginCheckButton" relativePoint="BOTTOMLEFT" x="7" y="-16"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Message options (comma seperated)">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <!-- <FontHeight val="12"/> -->
+                                            <Anchors>
+                                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="0" y="2"/>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers>                 
+                            </EditBox>
+
+
+                        </Frames>
+                    </Frame>
+
+                    <Frame parentKey="playerBarConfig" parentArray="frames" setAllPoints="true" hidden="true">
+
+                        <Frames>
+
+                            
+                            <CheckButton parentKey="playerBarSetEnabled" inherits="ChatConfigCheckButtonTemplate">
+                                <Size x="24" y="24"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="16" y="-50"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Enabled">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <!-- <FontHeight val="12"/> -->
+                                            <Anchors>
+                                                <Anchor point="LEFT">
+                                                    <offset x="24" y="0"/>
+                                                </Anchor>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers>  
+                            </CheckButton>
+
+
+                            <!-- player health config -->
+                            <CheckButton parentKey="playerHealthTextCheckButton" inherits="ChatConfigCheckButtonTemplate">
+                                <Size x="24" y="24"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="16" y="-80"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Show player health values">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <!-- <FontHeight val="12"/> -->
+                                            <Anchors>
+                                                <Anchor point="LEFT">
+                                                    <offset x="24" y="0"/>
+                                                </Anchor>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers>  
+                            </CheckButton>
+
+                            <EditBox parentKey="playerHealthTextFormatEditBox" inherits="InputBoxTemplate" autoFocus="false">
+                                <Size x="200" y="20"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" relativeKey="$parent.playerHealthTextCheckButton" relativePoint="BOTTOMLEFT" x="7" y="-16"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Text format">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <!-- <FontHeight val="12"/> -->
+                                            <Anchors>
+                                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="0" y="2"/>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers>                 
+                            </EditBox>
+
+
+                            <!-- player power config -->
+                            <CheckButton parentKey="playerPowerTextCheckButton" inherits="ChatConfigCheckButtonTemplate">
+                                <Size x="24" y="24"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" relativeKey="$parent.playerHealthTextCheckButton" relativePoint="BOTTOMLEFT" x="0" y="-50"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Show player power values">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <!-- <FontHeight val="12"/> -->
+                                            <Anchors>
+                                                <Anchor point="LEFT">
+                                                    <offset x="24" y="0"/>
+                                                </Anchor>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers>  
+                            </CheckButton>
+
+                            <EditBox parentKey="playerPowerTextFormatEditBox" inherits="InputBoxTemplate" autoFocus="false">
+                                <Size x="200" y="20"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" relativeKey="$parent.playerPowerTextCheckButton" relativePoint="BOTTOMLEFT" x="7" y="-16"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Text format">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <!-- <FontHeight val="12"/> -->
+                                            <Anchors>
+                                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="0" y="2"/>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers>                 
+                            </EditBox>
+
+                        </Frames>
+                    </Frame>
+
+                    <Frame parentKey="targetBarConfig" parentArray="frames" setAllPoints="true" hidden="true">
+                        <Frames>
+
+
+                            <CheckButton parentKey="targetBarSetEnabled" inherits="ChatConfigCheckButtonTemplate">
+                                <Size x="24" y="24"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="16" y="-50"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Enabled">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <!-- <FontHeight val="12"/> -->
+                                            <Anchors>
+                                                <Anchor point="LEFT">
+                                                    <offset x="24" y="0"/>
+                                                </Anchor>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers>  
+                            </CheckButton>
+
+
+                            <!-- target health config -->
+                            <CheckButton parentKey="targetHealthTextCheckButton" inherits="ChatConfigCheckButtonTemplate">
+                                <Size x="24" y="24"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="16" y="-80"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Show target health values">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <!-- <FontHeight val="12"/> -->
+                                            <Anchors>
+                                                <Anchor point="LEFT">
+                                                    <offset x="24" y="0"/>
+                                                </Anchor>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers>  
+                            </CheckButton>
+
+                            <EditBox parentKey="targetHealthTextFormatEditBox" inherits="InputBoxTemplate" autoFocus="false">
+                                <Size x="200" y="20"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" relativeKey="$parent.targetHealthTextCheckButton" relativePoint="BOTTOMLEFT" x="7" y="-16"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Text format">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <!-- <FontHeight val="12"/> -->
+                                            <Anchors>
+                                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="0" y="2"/>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers>                 
+                            </EditBox>
+
+
+                            <!-- target power config -->
+                            <CheckButton parentKey="targetPowerTextCheckButton" inherits="ChatConfigCheckButtonTemplate">
+                                <Size x="24" y="24"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" relativeKey="$parent.targetHealthTextCheckButton" relativePoint="BOTTOMLEFT" x="0" y="-50"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Show target power values">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <!-- <FontHeight val="12"/> -->
+                                            <Anchors>
+                                                <Anchor point="LEFT">
+                                                    <offset x="24" y="0"/>
+                                                </Anchor>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers>  
+                            </CheckButton>
+
+                            <EditBox parentKey="targetPowerTextFormatEditBox" inherits="InputBoxTemplate" autoFocus="false">
+                                <Size x="200" y="20"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" relativeKey="$parent.targetPowerTextCheckButton" relativePoint="BOTTOMLEFT" x="7" y="-16"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Text format">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <!-- <FontHeight val="12"/> -->
+                                            <Anchors>
+                                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="0" y="2"/>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers>                 
+                            </EditBox>
+                        </Frames>
+                    </Frame>
+
+                    <Frame parentKey="partyConfig" parentArray="frames" setAllPoints="true" hidden="true">
+
+                        <Frames>
+                            <CheckButton parentKey="enablePartyFrames" inherits="ChatConfigCheckButtonTemplate">
+                                <Size x="24" y="24"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="16" y="-50"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Enabled">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <!-- <FontHeight val="12"/> -->
+                                            <Anchors>
+                                                <Anchor point="LEFT">
+                                                    <offset x="24" y="0"/>
+                                                </Anchor>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers>  
+                            </CheckButton>
+
+                            <CheckButton parentKey="unitFramesCopyPlayer" inherits="ChatConfigCheckButtonTemplate">
+                                <Size x="24" y="24"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="16" y="-80"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Copy player spells">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <Anchors>
+                                                <Anchor point="LEFT">
+                                                    <offset x="24" y="0"/>
+                                                </Anchor>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers> 
+                            </CheckButton>
+
+                            <CheckButton parentKey="unitFramesVerticalLayout" inherits="ChatConfigCheckButtonTemplate">
+                                <Size x="24" y="24"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="16" y="-110"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Stack unit frames vertically">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <Anchors>
+                                                <Anchor point="LEFT">
+                                                    <offset x="24" y="0"/>
+                                                </Anchor>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers> 
+                            </CheckButton>
+
+                            <Slider name="SamsUiConfigPanelPartyConfigPartyUnitFrameWidth" parentKey="partyUnitFrameWidth" inherits="OptionsSliderTemplate" stepValue="1.0" minValue="20" maxValue="300" defaultValue="100">
+                                <Size x="160" y="16"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="250" y="-74"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Party unit frame width">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <Anchors>
+                                                <Anchor point="TOP">
+                                                    <offset x="0" y="24"/>
+                                                </Anchor>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers> 
+                            </Slider>
+
+                            <Slider name="SamsUiConfigPanelPartyConfigPartyUnitFramesNumSpellButtons" parentKey="partyUnitFramesNumSpellButtons" inherits="OptionsSliderTemplate" stepValue="1.0" minValue="1" maxValue="12" defaultValue="400">
+                                <Size x="160" y="16"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="250" y="-144"/>
+                                </Anchors>
+                                <Layers>
+                                    <Layer>
+                                        <FontString parentKey="label" inherits="GameFontNormalSmall" text="Number of unit frame spell buttons">
+                                            <Color r="1" g="1" b="1" a="1"/>
+                                            <Anchors>
+                                                <Anchor point="TOP">
+                                                    <offset x="0" y="24"/>
+                                                </Anchor>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers> 
+                            </Slider>
+
+                        </Frames>
+                    </Frame>
+
+                    <Frame parentKey="minimapConfig" parentArray="frames" setAllPoints="true" hidden="true">
+
+                        <Frames>
+
+                            <Slider name="SamsUiConfigPanelMinimapConfigNumberIconsPerRowSlider" parentKey="numberIconsPerRow" inherits="OptionsSliderTemplate" stepValue="1.0" minValue="1" maxValue="10" defaultValue="6">
+                                <Size x="160" y="16"/>
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="16" y="-16"/>
+                                </Anchors>
+                            </Slider>
+                        </Frames>
+                    </Frame>
+
+                    <Frame parentKey="sessions" parentArray="frames" setAllPoints="true" hidden="true">
+
+                        <Frames>
+
+                            <Frame parentKey="listview" inherits="SamsUiListviewTemplate">
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="4" y="-30"/>
+                                    <Anchor point="BOTTOMRIGHT" x="-4" y="4"/>
+                                </Anchors>
+                                <KeyValues>
+                                    <KeyValue key="frameType" value="FRAME" type="string"/>
+                                    <KeyValue key="itemTemplate" value="SamsUiConfigPanelSessionsListviewItemTemplate" type="string"/>
+                                    <KeyValue key="elementHeight" value="80" type="number"/>
+                                    <KeyValue key="isSelectable" value="true" type="boolean"/>
+                                </KeyValues>
+                            </Frame>
+
+                        </Frames>
+
+                    </Frame>
+
+
+                    <Frame parentKey="databaseControl" parentArray="frames" setAllPoints="true" hidden="true">
+
+                        <Frames>
+
+                            <Frame parentKey="listview" inherits="SamsUiListviewTemplate">
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" x="4" y="-30"/>
+                                    <Anchor point="BOTTOMRIGHT" x="-4" y="4"/>
+                                </Anchors>
+
+                                <Layers>
+                                    <Layer level="OVERLAY">
+                                        <FontString inherits="GameFontNormalLarge" text="Character">
+                                            <!-- <Color r="1" g="1" b="1"/> -->
+                                            <Anchors>
+                                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="9" y="0"/>
+                                            </Anchors>
+                                        </FontString>
+                                        <FontString inherits="GameFontNormalLarge" text="Class">
+                                            <!-- <Color r="1" g="1" b="1"/> -->
+                                            <Anchors>
+                                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="220" y="0"/>
+                                            </Anchors>
+                                        </FontString>
+                                        <FontString inherits="GameFontNormalLarge" text="Level">
+                                            <!-- <Color r="1" g="1" b="1"/> -->
+                                            <Anchors>
+                                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="300" y="0"/>
+                                            </Anchors>
+                                        </FontString>
+                                        <FontString inherits="GameFontNormalLarge" text="XP">
+                                            <!-- <Color r="1" g="1" b="1"/> -->
+                                            <Anchors>
+                                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="360" y="0"/>
+                                            </Anchors>
+                                        </FontString>
+                                        <FontString inherits="GameFontNormalLarge" text="Tradeskills">
+                                            <!-- <Color r="1" g="1" b="1"/> -->
+                                            <Anchors>
+                                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="440" y="0"/>
+                                            </Anchors>
+                                        </FontString>
+                                        <FontString inherits="GameFontNormalLarge" text="Delete">
+                                            <!-- <Color r="1" g="1" b="1"/> -->
+                                            <Anchors>
+                                                <Anchor point="BOTTOMRIGHT" relativePoint="TOPRIGHT" x="0" y="0"/>
+                                            </Anchors>
+                                        </FontString>
+                                    </Layer>
+                                </Layers>
+
+                                <KeyValues>
+                                    <KeyValue key="frameType" value="FRAME" type="string"/>
+                                    <KeyValue key="itemTemplate" value="SamsUiConfigPanelDatabaseControlListviewItemTemplate" type="string"/>
+                                    <KeyValue key="elementHeight" value="22" type="number"/>
+                                    <KeyValue key="isSelectable" value="true" type="boolean"/>
+                                </KeyValues>
+                            </Frame>
+                        </Frames>
+                    </Frame>
+
+                    <Frame parentKey="addons" parentArray="frames" setAllPoints="true" hidden="true">
+
+                    </Frame>
+                </Frames>
+            </Frame>
+
+
+
+        </Frames>
+
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+            <OnEvent method="OnEvent"/>
+            <OnDragStart>
+                self:StartMoving()
+            </OnDragStart>
+            <OnDragStop>
+                self:StopMovingOrSizing()
+            </OnDragStop>
+        </Scripts>
+    </Frame>
+
+
+</UI>

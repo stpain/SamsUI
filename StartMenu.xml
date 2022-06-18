@@ -1,0 +1,100 @@
+<UI>
+    <Frame name="SamsUiStartMenu" frameStrata="DIALOG">
+        <Layers>
+            <Layer level="BACKGROUND" textureSubLevel="-4">
+                <Texture parentKey="border">
+                    <Color r="0.9" g="0.6" b="0.01"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="-1" y="1"/>
+                        <Anchor point="BOTTOMRIGHT" x="1" y="-1"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="BACKGROUND" textureSubLevel="-3">
+                <Texture parentKey="borderInner">
+                    <Color r="0" g="0" b="0"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="0" y="0"/>
+                        <Anchor point="BOTTOMRIGHT" x="0" y="-0"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="BACKGROUND" textureSubLevel="-2">
+                <Texture parentKey="background" atlas="ClassHall_StoneFrame-BackgroundTile" alpha="0.5" horizTile="true" vertTile="true" setAllPoints="true"/>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Frame parentKey="quickPane" frameLevel="6" enableMouse="true">
+                <Layers>
+                    <Layer level="BACKGROUND" textureSubLevel="-2">
+                        <Texture parentKey="background" alpha="0.5" setAllPoints="true">
+                            <Color r="1" g="1" b="1" a="0.1"/>
+                        </Texture>
+                    </Layer>
+                </Layers>
+                <Size x="40"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="0" y="0"/>
+                    <Anchor point="BOTTOMLEFT" x="0" y="0"/>
+                </Anchors>
+                <Frames>
+                    <Button parentKey="exitGame" inherits="SamsUiStartMenuQuickPaneButton">
+                        <Anchors>
+                            <Anchor point="TOP" x="0" y="0"/>
+                        </Anchors>
+                        <NormalTexture atlas="transmog-icon-remove"/>
+                        <KeyValues>
+                            <KeyValue key="tooltip" value="Exit Game" type="string"/>
+                        </KeyValues>
+                    </Button>
+                    <Button parentKey="logout" inherits="SamsUiStartMenuQuickPaneButton">
+                        <Anchors>
+                            <Anchor point="TOP" x="0" y="-40"/>
+                        </Anchors>
+                        <NormalTexture atlas="transmog-icon-revert"/>
+                        <KeyValues>
+                            <KeyValue key="tooltip" value="Logout" type="string"/>
+                        </KeyValues>
+                    </Button>
+                    <Button parentKey="continue" inherits="SamsUiStartMenuQuickPaneButton">
+                        <Anchors>
+                            <Anchor point="TOP" x="0" y="-80"/>
+                        </Anchors>
+                        <NormalTexture atlas="orderhalltalents-done-checkmark"/>
+                        <KeyValues>
+                            <KeyValue key="tooltip" value="Continue" type="string"/>
+                        </KeyValues>
+                    </Button>
+                    <Button parentKey="characters" inherits="SamsUiStartMenuQuickPaneButton">
+                        <Anchors>
+                            <Anchor point="TOP" x="0" y="-120"/>
+                        </Anchors>
+                        <NormalTexture atlas="GarrMission_MissionIcon-Recruit"/>
+                        <KeyValues>
+                            <KeyValue key="tooltip" value="Continue" type="string"/>
+                        </KeyValues>
+                    </Button>
+                </Frames>
+            </Frame>
+            <Frame parentKey="menuList" inherits="SamsUiListviewTemplate">
+                <Size x="200"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.quickPane" relativePoint="TOPRIGHT" x="0" y="0"/>
+                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.quickPane" relativePoint="BOTTOMRIGHT" x="0" y="0"/>
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="frameType" value="BUTTON" type="string"/>
+                    <KeyValue key="itemTemplate" value="SamsUiStartMenuButton" type="string"/>
+                    <KeyValue key="elementHeight" value="30" type="number"/>
+                </KeyValues>
+            </Frame>
+            <Frame parentKey="menuTiles">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.menuList" relativePoint="TOPRIGHT" x="0" y="0"/>
+                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.MenuList" relativePoint="BOTTOMRIGHT" x="0" y="0"/>
+                    <Anchor point="RIGHT" x="0" y="0"/>
+                </Anchors>
+            </Frame>
+        </Frames>
+    </Frame>
+</UI>

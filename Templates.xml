@@ -2,6 +2,7 @@
 
 <UI>
 
+    <!-- default template for creating a lisview widget -->
     <Frame name="SamsUiListviewTemplate" mixin="SamsUiListviewMixin" virtual="true">
         <Frames>
             <Frame parentKey="scrollBox" inherits="WowScrollBoxList"/>
@@ -16,6 +17,105 @@
             <OnLoad method="OnLoad"/>
         </Scripts>
     </Frame>
+
+    <!-- secure macro button templates with left/right clicks set to macro text -->
+    <Button name="SamsUiSecureMacroButton" virtual="true" inherits="SecureActionButtonTemplate" registerForClicks="LeftButtonUp,RightButtonUp">
+        <Attributes>
+            <Attribute name="type1" value="macro"/>
+            <Attribute name="type2" value="macro"/>
+        </Attributes>
+    </Button>
+
+    <!-- system tray button template -->
+    <Button name="SamsUiSystemTrayButton" mixin="SamsUiSystemTrayButtonMixin" inherits="SamsUiSecureMacroButton" virtual="true">
+        <HighlightTexture atlas="transmog-frame-pink"/>
+        <Size x="22" y="22"/>
+        <Scripts>
+            <OnLeave method="OnLeave"/>
+        </Scripts>
+        <KeyValues>
+            <KeyValue key="isVisible" value="true" type="boolean"/>
+        </KeyValues>
+    </Button>
+
+    <!-- start menu quick pane button template -->
+    <Button name="SamsUiStartMenuQuickPaneButton" mixin="SamsUiStartMenuQuickPaneButtonMixin" inherits="SamsUiSecureMacroButton" virtual="true">
+        <HighlightTexture atlas="communities-create-avatar-border-hover"/>
+        <Size x="38" y="38"/>
+        <Scripts>
+            <OnEnter method="OnEnter"/>
+            <OnLeave method="OnLeave"/>
+        </Scripts>
+    </Button>
+
+    <!-- start menu button template -->
+    <Button name="SamsUiStartMenuButton" mixin="SamsUiStartMenuButtonMixin" inherits="SamsUiSecureMacroButton" virtual="true">
+        <Layers>
+            <Layer level="HIGHLIGHT">
+                <Texture parentKey="highlight">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="-1" y="1"/>
+                        <Anchor point="BOTTOMRIGHT" x="1" y="-1"/>
+                    </Anchors>
+                    <Color r="1" g="1" b="1" a="0.2"/>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture parentKey="icon">
+                    <Anchors>
+                        <Anchor point="LEFT" x="0" y="0"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <FontString parentKey="label" inherits="GameFontNormalSmall" setAllPoints="true" justifyH="LEFT">
+                    <Color r="1" g="1" b="1"/>
+                    <Anchors>
+                        <Anchor point="LEFT" relativeKey="$parent.icon" relativePoint="RIGHT" x="2" y="0"/>
+                        <Anchor point="RIGHT" x="0" y="0"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+    </Button>
+
+    <!-- start menu tile button -->
+    <Button name="SamsUiStartMenuTileButton" virtual="true">
+        <Size x="60" y="60"/>
+        <Layers>
+            <Layer level="HIGHLIGHT">
+                <Texture parentKey="highlight">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="-1" y="1"/>
+                        <Anchor point="BOTTOMRIGHT" x="1" y="-1"/>
+                    </Anchors>
+                    <Color r="1" g="1" b="1" a="0.2"/>
+                </Texture>
+            </Layer>
+            <Layer level="BACKGROUND" textureSubLevel="-4">
+                <Texture parentKey="border">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="-1" y="1"/>
+                        <Anchor point="BOTTOMRIGHT" x="1" y="-1"/>
+                    </Anchors>
+                    <Color r="0.9" g="0.6" b="0.01"/>
+                </Texture>
+            </Layer>
+            <Layer level="BACKGROUND" textureSubLevel="-3">
+                <Texture parentKey="background" setAllPoints="true">
+                    <Color r="0" g="0" b="0"/>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture parentKey="icon" setAllPoints="true"/>
+            </Layer>
+            <Layer level="OVERLAY">
+                <FontString parentKey="label" inherits="GameFontNormalSmall" setAllPoints="true" justifyH="LEFT">
+                    <Color r="1" g="1" b="1"/>
+                </FontString>
+            </Layer>
+        </Layers>
+    </Button>
 
 
     <Frame name="SamsUiListviewTemplateNoMixin" virtual="true">
@@ -156,13 +256,6 @@
         </Scripts>
     </Button>
 
-
-    <Button name="SamsUiSecureMacroButton" virtual="true" inherits="SecureActionButtonTemplate" registerForClicks="LeftButtonUp,RightButtonUp">
-        <Attributes>
-            <Attribute name="type1" value="macro"/>
-            <Attribute name="type2" value="macro"/>
-        </Attributes>
-    </Button>
 
 
     <Button name="SamsUiTopBarSecureMacroContainerMenuButton" mixin="SamsUiTopBarSecureMacroContainerMenuButtonMixin" inherits="SamsUiSecureMacroButton" virtual="true">

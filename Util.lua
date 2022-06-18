@@ -2,23 +2,24 @@
 
 local name, addon = ...
 
-
 local Util = {}
-function Util:FormatStatsusBarTags(t, s, cur, _max, per)
+
+
+function Util.FormatStatsusBarTags(t, s, cur, _max, per)
     s = s:gsub("{cur}", cur)
     s = s:gsub("{max}", _max)
     s = s:gsub("{per}", per)
     t:SetText(s)
 end
 
-function Util:CapitaliseString(s)
+function Util.CapitaliseString(s)
     if type(s) == "string" then
         return s:sub(1,1):upper()..s:sub(2):lower()
     end
 end
 
 
-function Util:MakeFrameMoveable(frame)
+function Util.MakeFrameMoveable(frame)
     frame:SetMovable(true)
     frame:EnableMouse(true)
     frame:RegisterForDrag("LeftButton")
@@ -27,7 +28,7 @@ function Util:MakeFrameMoveable(frame)
 end
 
 
-function Util:LockFramePosition(frame)
+function Util.LockFramePosition(frame)
     frame:SetMovable(false)
     frame:RegisterForDrag("LeftButton")
     frame:SetScript("OnDragStart", nil)
@@ -35,7 +36,7 @@ function Util:LockFramePosition(frame)
 end
 
 
-function Util:FormatNumberForCharacterStats(num)
+function Util.FormatNumberForCharacterStats(num)
     if type(num) == 'number' then
         local trimmed = string.format("%.2f", num)
         return tonumber(trimmed)
@@ -45,7 +46,7 @@ function Util:FormatNumberForCharacterStats(num)
 end
 
 
-function Util:GetContainerItemsValue(classID, subClassID, itemID, itemLink)
+function Util.GetContainerItemsValue(classID, subClassID, itemID, itemLink)
 
     local value = 0;
 
@@ -97,4 +98,4 @@ end
 
 
 
-addon.Util = Util;
+addon.util = Util;
